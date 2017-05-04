@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block meta_title %}{{ member.username }} profile{% endblock meta_title %}
+
+{% block main_content %}
+
+    <h4>{{ member.username }} profile</h4>
+        {{ member.username }}<br>
+        {{ member.email }}<br>
+        {{ member.delivery_center.location }}<br>
+        {{ member.date_joined }}<br>
+
+        <a href="#">projects</a><br>
+
+        <br>
+        <a href="{% url "update" member.pk %}">update</a> |
+        <a href="{% url "delete" member.pk %}">delete</a>
+{% endblock main_content %}

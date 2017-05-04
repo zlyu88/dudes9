@@ -20,6 +20,10 @@ from django.views.generic import RedirectView
 
 urlpatterns = [
     url(r'^$', RedirectView.as_view(url=reverse_lazy('index')), name='go-to-relation'),
-    url(r'^relation/', include('relation.urls')),
+    # url(r'^relation/', include('relation.urls')),
+    url(r'^relation/', include([
+        url(r'^', include('relation.urls')),
+        url(r'^', include('project.urls')),
+        ])),
     url(r'^admin/', admin.site.urls),
 ]

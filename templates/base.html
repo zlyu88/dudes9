@@ -1,0 +1,77 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Dudes9 {% block meta_title %}{% endblock meta_title %}</title>
+    <meta name="description" value="dudes9" />
+
+    <!-- Include Styles -->
+{#    <link rel="stylesheet" href="https://cdn.jsdelivr.net/bootstrap/3.3.0/css/bootstrap.min.css">#}
+{#    <link  rel="stylesheet" type="text/css" href={% static "css/style.css" %} />#}
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+<body>
+
+    <!-- Start Container -->
+    <div class="container">
+
+        <!-- Start Header -->
+        <div class="row" id="header">
+
+            <!-- Logo -->
+            <div class="col-xs-8">
+                <h1><a href="{% url 'index' %}">dudes9</a></h1>
+            </div>
+        </div>
+        <!-- End Header -->
+        <div>{% block main_content %}{% endblock main_content %}</div>
+            <hr>
+            go to lists:<br>
+            <a href="{% url "members" %}">members</a><br>
+            <a href="{% url "projects" %}">projects</a><br>
+{#            <a href="{% url "sites:list" %}">sites</a><br>#}
+{#            <a href="{% url "contracts:list" %}">contracts</a><br>#}
+{#            <a href="{% url "users" %}">users</a><br>#}
+
+            {% if is_paginated %}
+              <ul class="pagination">
+                {% if page_obj.has_previous %}
+                  <li><a href="?page={{ page_obj.previous_page_number }}">&laquo;</a></li>
+                {% else %}
+                  <li class="disabled"><span>&laquo;</span></li>
+                {% endif %}
+                {% for i in paginator.page_range %}
+                  {% if page_obj.number == i %}
+                    <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+                  {% else %}
+                    <li><a href="?page={{ i }}">{{ i }}</a></li>
+                  {% endif %}
+                {% endfor %}
+                {% if page_obj.has_next %}
+                  <li><a href="?page={{ page_obj.next_page_number }}">&raquo;</a></li>
+                {% else %}
+                  <li class="disabled"><span>&raquo;</span></li>
+                {% endif %}
+              </ul>
+            {% endif %}
+
+    </div>
+    <!-- End Container -->
+
+    <!-- Start Footer -->
+    <div class="row" id="footer">
+        <div class="col-xs-12">
+            &copy; 2017 dudes9
+        </div>
+    </div>
+    <!-- End Footer -->
+
+    <!-- Javascripts Section -->
+{#    <script src={% static "js/script" %} type="text/javascript"></script>#}
+
+</body>
+</html>
