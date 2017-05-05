@@ -4,7 +4,7 @@ from django.views.generic import DetailView, UpdateView, DeleteView
 
 from dudes9 import settings
 from relation.forms import AddMemberForm
-from relation.models import Member, Position
+from relation.models import Member
 
 
 class IndexView(TemplateView):
@@ -47,16 +47,7 @@ class MemberDelete(DeleteView):
     success_url = reverse_lazy('members')
 
 
-# class MemberProjectsView(ListView):
-#     model = Position
-#     page_title = 'Projects list'
-#     paginate_by = settings.PAGINATION
-#     context_object_name = 'positions'
-#     template_name = 'member_projects.html'
-#     queryset = Position.objects.prefetch_related('member').all()
-
-
 class MemberProjectsView(DetailView):
     model = Member
     template_name = 'member_projects.html'
-    queryset = Member.objects.prefetch_related('positions').all()
+    queryset = Member.objects.prefetch_related('relation').all()

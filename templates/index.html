@@ -2,8 +2,6 @@
 
 {% block main_content %}
 
-    Hi. This is the beginning! Good luck! =)
-
     {% if user.is_authenticated %}
         <p>Welcome, <font color="blue"><i>{{ user.username }}</i></font>.</p><br>
         <a href="{% url "logout" %}">logout</a>

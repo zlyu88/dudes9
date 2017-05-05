@@ -10,7 +10,7 @@
         {{ member.delivery_center.location }}<br>
         {{ member.date_joined }}<br>
 
-        <a href="#">projects</a><br>
+        <a href="{% url "member_projects" member.pk %}">projects</a><br>
 
         <br>
         <a href="{% url "update" member.pk %}">update</a> |

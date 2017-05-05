@@ -9,6 +9,13 @@ class DeliveryCenter(models.Model):
         return self.location
 
 
+class Technology(models.Model):
+    title = models.CharField(max_length=255)
+
+    def __str__(self):
+        return self.title
+
+
 class Member(AbstractUser):
     delivery_center = models.ForeignKey(DeliveryCenter, on_delete=models.CASCADE, related_name='members')
     password = models.CharField(max_length=255)
@@ -16,8 +23,6 @@ class Member(AbstractUser):
 
 class Position(models.Model):
     position = models.CharField(max_length=255)
-    member = models.ManyToManyField(Member, db_constraint=False, related_name='positions')
-    # project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name='positions')
 
     def __str__(self):
         return self.position
@@ -25,16 +30,14 @@ class Position(models.Model):
 
 class Project(models.Model):
     title = models.CharField(max_length=255)
-    position = models.ManyToManyField(Position, db_constraint=False, related_name='projects')
-    # technologies = models.ManyToManyField(Technology, db_constraint=False, related_name='projects')
+    members = models.ManyToManyField(Member, through='Relation', through_fields=('project', 'member'))
+    technologies = models.ManyToManyField(Technology, db_constraint=False, related_name='projects')
 
     def __str__(self):
         return self.title
 
 
-class Technology(models.Model):
-    title = models.CharField(max_length=255)
-    project = models.ManyToManyField(Project, db_constraint=False, related_name='technologies')
-
-    def __str__(self):
-        return self.title
+class Relation(models.Model):
+    project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name="relation")
+    member = models.ForeignKey(Member, on_delete=models.CASCADE, related_name="relation")
+    position = models.ForeignKey(Position, on_delete=models.CASCADE, related_name="relation")

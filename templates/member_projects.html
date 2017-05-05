@@ -13,12 +13,12 @@
                 <th> position </th>
         </thead>
         <tbody>
-        {% for position in member.positions.all %}
+        {% for relation in member.relation.all %}
 
             <tr>
-                <td>{{ position.pk }}</td>
-                <td><a href="#">{{ position.projects.all }}</a></td>
-                <td>{{ position.position }}</td>
+                <td>{{ relation.pk }}</td>
+                <td><a href="#">{{ relation.project.title }}</a></td>
+                <td>{{ relation.position }}</td>
             </tr>
 
         {% empty %}
