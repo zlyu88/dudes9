@@ -4,12 +4,13 @@
 
 {% block main_content %}
 
+    <p>{{ member.username }} projects</p>
     <!-- Start Member Projects Listing -->
     <table class="table table-hover table-striped">
         <thead>
             <tr>
                 <th> id </th>
-                <th><a href="#"> project </a></th>
+                <th> project </th>
                 <th> position </th>
         </thead>
         <tbody>
@@ -17,7 +18,8 @@
 
             <tr>
                 <td>{{ relation.pk }}</td>
-                <td><a href="#">{{ relation.project.title }}</a></td>
+                <td><a href="{% url "project_detail" relation.project.pk %}">
+                    {{ relation.project.title }}</a></td>
                 <td>{{ relation.position }}</td>
             </tr>
 
@@ -25,7 +27,6 @@
             <p>No members yet</p>
         {% endfor %}
         </tbody>
-    {{ member.username }}
     </table>
 <!-- End Members Listing -->
 {% endblock main_content %}

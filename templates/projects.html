@@ -5,11 +5,43 @@
 {% block main_content %}
 
     <h4>Projects list:</h4>
-    {% for project in projects %}
-        <li><a href="#">{{ project.title }}</a><br></li>
 
-    {% empty %}
-        <p>No projects yet</p>
-    {% endfor %}
+    <table class="table table-hover table-striped">
+        <thead>
+            <tr>
+                <th> id </th>
+                <th> title </th>
+                <th> members number </th>
+                <th> members list </th>
+                <th> start date </th>
+                <th> end date </th>
+        </thead>
+        <tbody>
+        {% for project in projects %}
+
+            <tr>
+                <td>{{ project.pk }}</td>
+                <td><a href="{% url "project_detail" project.pk %}">{{ project.title }}</a></td>
+                <td>{{ project.relation.all.count }}</td>
+                <td>
+                    <div class="dropdown">
+                        <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown"> watch
+                        <span class="caret"></span></button>
+                        <ul class="dropdown-menu">
+                            {% for member in project.relation.all %}
+                                <li><a href="{% url "profile" member.member.pk %}">{{ member.member.username }}</a></li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </td>
+                <td>---</td>
+                <td>---</td>
+            </tr>
+
+        {% empty %}
+            <p>No members yet</p>
+        {% endfor %}
+        </tbody>
+    </table>
 
 {% endblock main_content %}

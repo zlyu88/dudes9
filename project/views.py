@@ -29,36 +29,21 @@ class AddRelationView(CreateView):
     success_url = reverse_lazy('projects')
 
 
-# class MembersListView(ListView):
-#     model = Member
-#     page_title = 'Members list'
-#     paginate_by = settings.PAGINATION
-#     context_object_name = 'members'
-#     template_name = 'members.html'
-#     queryset = Member.objects.select_related('delivery_center').all()
-#
-#
-# class ProfileView(DetailView):
-#     model = Member
-#     template_name = 'profile.html'
-#     queryset = Member.objects.select_related('delivery_center').all()
-#
-#
-# class MemberUpdate(UpdateView):
-#     model = Member
-#     template_name = 'member_update.html'
-#     fields = ['username']
-#     success_url = reverse_lazy('members')
-#
-#
-# class MemberDelete(DeleteView):
-#     model = Member
-#     template_name = 'member_delete.html'
-#     success_url = reverse_lazy('members')
-#
-#
-# class MemberProjectsView(DetailView):
-#     model = Member
-#     template_name = 'member_projects.html'
-#     queryset = Member.objects.prefetch_related('relation').all()
+class ProjectDetailView(DetailView):
+    model = Project
+    template_name = 'project_detail.html'
+    queryset = Project.objects.prefetch_related('members', 'relation').all()
 
+
+class ProjectUpdateView(UpdateView):
+    model = Project
+    template_name = 'project_update.html'
+    fields = ['title', 'technologies']
+    success_url = reverse_lazy('projects')
+
+
+class ProjectDeleteView(DeleteView):
+    model = Project
+    template_name = 'project_delete.html'
+    success_url = reverse_lazy('projects')
+    queryset = Project.objects.prefetch_related('relation').all()
