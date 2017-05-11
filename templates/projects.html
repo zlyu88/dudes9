@@ -11,8 +11,9 @@
             <tr>
                 <th> id </th>
                 <th> title </th>
-                <th> members number </th>
-                <th> members list </th>
+                <th> positions </th>
+                <th> members </th>
+                <th> technologies </th>
                 <th> start date </th>
                 <th> end date </th>
         </thead>
@@ -21,27 +22,64 @@
 
             <tr>
                 <td>{{ project.pk }}</td>
+
                 <td><a href="{% url "project_detail" project.pk %}">{{ project.title }}</a></td>
-                <td>{{ project.relation.all.count }}</td>
+
                 <td>
                     <div class="dropdown">
-                        <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown"> watch
+                        <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">
+                            {{ project.positions.count }}
                         <span class="caret"></span></button>
                         <ul class="dropdown-menu">
-                            {% for member in project.relation.all %}
-                                <li><a href="{% url "profile" member.member.pk %}">{{ member.member.username }}</a></li>
+                            {% for position in project.positions %}
+                                <li><a href="#">{{ position.position }}</a></li>
                             {% endfor %}
                         </ul>
                     </div>
                 </td>
-                <td>---</td>
-                <td>---</td>
-            </tr>
 
+                <td>
+                    <div class="dropdown">
+                        <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">
+                            {{ project.active_relations.count }}
+                        <span class="caret"></span></button>
+                        <ul class="dropdown-menu">
+                            {% for relation in project.active_relations %}
+                                <li><a href="{% url "profile" relation.member.pk %}">
+                                    {{ relation.member.username }}</a></li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </td>
+
+                <td>
+                    <div class="dropdown">
+                        <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">
+                            {{ project.technologies.all.count }}
+                        <span class="caret"></span></button>
+                        <ul class="dropdown-menu">
+                            {% for tech in project.technologies.all %}
+                                <li><a href="#">{{ tech.title }}</a></li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </td>
+
+                <td>{{ project.start_date }}</td>
+
+                <td> {% if project.end_date %}
+                    {{ project.end_date }}
+                    {% else %}
+                    <form action="{% url 'close_project' project.pk %}" method="GET">
+                        <input type="submit" value="close project">
+                    </form>
+                    {% endif %}
+                </td>
+            </tr>
         {% empty %}
             <p>No members yet</p>
         {% endfor %}
         </tbody>
     </table>
-
+{#Relation.objects.filter(project__title__startswith='cl').values('position_id').distinct().count()#}
 {% endblock main_content %}

@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block meta_title %}Relations{% endblock meta_title %}
+
+{% block main_content %}
+    <!-- Start Members Listing -->
+    <table class="table table-hover table-striped">
+        <thead>
+            <tr>
+                <th> id </th>
+                <th> member </th>
+                <th> position </th>
+                <th> project </th>
+                <th> join </th>
+                <th> left </th>
+                <th> action </th>
+        </thead>
+        <tbody>
+        {% for rel in relations %}
+            <tr>
+                <td>{{ rel.pk }}</td>
+                <td><a href="{% url "profile" rel.member.id %}">{{ rel.member.username }}</a></td>
+                <td>{{ rel.position }}</td>
+                <td><a href="{% url "project_detail" rel.project.id %}">{{ rel.project.title }}</a></td>
+                <td>{{ rel.date_joined }}</td>
+                <td>{{ rel.date_left }}</td>
+                <td>
+                    <div class="dropdown">
+                        <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">action
+                        <span class="caret"></span></button>
+                        <ul class="dropdown-menu">
+                            <li><a href="{% url "delete_relation" rel.pk %}">delete</a></li>
+                            <li><a href="{% url "leave_project" rel.pk %}">user leave</a></li>
+                        </ul>
+                    </div>
+                </td>
+            </tr>
+        {% empty %}
+            <p>No relations yet</p>
+        {% endfor %}
+        </tbody>
+    </table>
+<!-- End Members Listing -->
+{% endblock main_content %}

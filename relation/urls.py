@@ -19,4 +19,7 @@ urlpatterns = [
 
     # url(r'^member_positions/(?P<pk>[0-9]+)/$', views.MemberPositionsView.as_view(), name='member_positions'),
     url(r'^member_projects/(?P<pk>[0-9]+)/$', views.MemberProjectsView.as_view(), name='member_projects'),
+    # url(r'^member_history/(?P<pk>[0-9]+)/$', views.MemberHistoryView.as_view(), name='member_history'),
+
+    url(r'^leave_project/(?P<pk>[0-9]+)/$', views.MemberLeftProject.as_view(), name='leave_project'),
 ]

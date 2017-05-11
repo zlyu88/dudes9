@@ -3,7 +3,6 @@
 {% block meta_title %}Members{% endblock meta_title %}
 
 {% block main_content %}
-
     <!-- Start Members Listing -->
     {% with order_by=request.GET.order_by reverse=request.GET.reverse %}
     <table class="table table-hover table-striped">
@@ -20,6 +19,7 @@
 
                 </th>
                 <th> location </th>
+                <th> email </th>
                 <th> added </th>
                 <th> action </th>
         </thead>
@@ -29,7 +29,7 @@
                 <td>{{ member.pk }}</td>
                 <td><img height="30" width="30" src="#"></td>
                 <td><a href="{% url "profile" member.pk %}">{{ member.username }}</a></td>
-                <td><a href="#">{{ member.delivery_center.location }}</a></td>
+                <td><a href="#">{{ member.delivery_center }}</a></td>
                 <td><a href="#">{{ member.email }}</a></td>
                 <td>{{ member.date_joined }}</td>
                 <td>
@@ -53,6 +53,8 @@
                         <ul class="dropdown-menu">
 {#                            <li><a href="{% url "member_positions" member.pk %}">positions</a></li>#}
                             <li><a href="{% url "member_projects" member.pk %}">projects</a></li>
+                            <li><a href="#">history</a></li>
+
                         </ul>
                     </div>
                 </td>

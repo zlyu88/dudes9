@@ -18,6 +18,8 @@ from django.contrib import admin
 from django.urls import reverse_lazy
 from django.views.generic import RedirectView
 
+from dudes9 import settings
+
 urlpatterns = [
     url(r'^$', RedirectView.as_view(url=reverse_lazy('index')), name='go-to-relation'),
     # url(r'^relation/', include('relation.urls')),
@@ -27,3 +29,9 @@ urlpatterns = [
         ])),
     url(r'^admin/', admin.site.urls),
 ]
+
+if settings.DEBUG:
+    import debug_toolbar
+    urlpatterns += [
+        url(r'^__debug__/', include(debug_toolbar.urls)),
+    ]

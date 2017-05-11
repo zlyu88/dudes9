@@ -7,7 +7,7 @@
     <h4>{{ member.username }} profile</h4>
         {{ member.username }}<br>
         {{ member.email }}<br>
-        {{ member.delivery_center.location }}<br>
+        {{ member.delivery_center }}<br>
         {{ member.date_joined }}<br>
 
         <a href="{% url "member_projects" member.pk %}">projects</a><br>
