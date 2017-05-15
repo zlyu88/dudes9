@@ -3,13 +3,15 @@
 {% block meta_title %}Delete project{% endblock meta_title %}
 
 {% block main_content %}
-
+{% if user.is_staff %}
     <h4>Do you really want to delete project {{ project.title }}?</h4>
-<form action="{% url 'delete_project' project.pk %}" method="post" enctype="multipart/form-data">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <input type="submit" value="Submit">
-    <input type="button" onclick="history.back();" value="Cancel">
-</form>
-
+        <form action="{% url 'delete_project' project.pk %}" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <input type="submit" value="Submit">
+            <input type="button" onclick="history.back();" value="Cancel">
+        </form>
+{% else %}
+    go to hell, bastard
+{% endif %}
 {% endblock main_content %}

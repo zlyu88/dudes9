@@ -1,11 +1,11 @@
 {% extends "base.html" %}
 
-{% block meta_title %}Left project{% endblock meta_title %}
+{% block meta_title %}Update position{% endblock meta_title %}
 
 {% block main_content %}
 {% if user.is_staff or user.pk == member.pk%}
-    <h4>Do you really want member {{ relation.member.username }} to leave {{ relation.project.title }} project?</h4>
-        <form action="{% url 'leave_project' relation.pk %}" method="post" enctype="multipart/form-data">
+    <h4>Do you really want member {{ relation.member.username }} to change {{ relation.position }} position?</h4>
+        <form action="{% url 'update_position' relation.pk %}" method="post" enctype="multipart/form-data">
             {% csrf_token %}
             {{ form.as_p }}
             <input type="submit" value="Submit">

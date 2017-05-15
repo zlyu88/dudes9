@@ -14,6 +14,14 @@ class EmailLoginForm(AuthenticationForm):
         widget=forms.TextInput(attrs={'autofocus': ''}),
         label='Email')
 
+    error_messages = {
+        'invalid_login': (
+            "Please enter a correct email and password. Note that both "
+            "fields may be case-sensitive."
+        ),
+        'inactive': ("This account is inactive."),
+    }
+
     def clean(self):
         try:
             self.cleaned_data["username"] = get_user_model().objects.get(email=self.data["username"])
@@ -25,10 +33,11 @@ class EmailLoginForm(AuthenticationForm):
 class AddMemberForm(UserCreationForm):
     username = forms.CharField(max_length=255, help_text='Required. Inform a valid username.')
     email = forms.EmailField(max_length=50, help_text='Required. Inform a valid email address.')
+    image = forms.ImageField(required=False, label='Select a file')
 
     class Meta:
         model = Member
-        fields = ('username', 'email', 'delivery_center', 'password1', 'password2')
+        fields = ('delivery_center', 'username', 'email', 'password1', 'password2', 'image')
 
 
 class AddProjectForm(forms.ModelForm):
@@ -72,3 +81,18 @@ class LeaveProjectForm(forms.ModelForm):
         model = Relation
         fields = ('date_left',)
         widgets = {'date_left': forms.HiddenInput()}
+
+
+class UpdatePositionForm(forms.ModelForm):
+
+    class Meta:
+        model = Relation
+        fields = ('position',)
+
+
+class ChangePasswordForm(UserCreationForm):
+
+    class Meta:
+        model = Member
+        fields = ('username', 'password1', 'password2')
+        widgets = {'username': forms.HiddenInput()}

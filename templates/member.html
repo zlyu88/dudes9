@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block meta_title %}{{ member.username }} details{% endblock meta_title %}
+
+{% block main_content %}
+
+    <h4>{{ member.username }} details:</h4>
+        {% if member.image %}
+            <img height="250" src="/{{ member.image }}"/>
+        {% else %}
+            <img height="250" src="{% static "img/noimage.png" %}"/>
+        {% endif %}
+        <br>
+        {{ member.username }}<br>
+        {{ member.email }}<br>
+        {{ member.delivery_center }}<br>
+        {{ member.date_joined }}<br>
+
+        <a href="{% url "member_projects" member.pk %}">projects</a><br>
+
+        <br>
+        {% if user.is_staff or user.pk == member.pk %}
+            <a href="{% url "change_password" member.pk %}">change password</a>
+            | <a href="{% url "update" member.pk %}">update</a>
+        {% endif %}
+        {% if user.is_staff %}
+            | <a href="{% url "delete" member.pk %}">delete</a>
+        {% endif %}
+{% endblock main_content %}

@@ -1,3 +1,4 @@
+from django.db.models import Prefetch
 from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy
 from django.utils import timezone
@@ -5,7 +6,7 @@ from django.views.generic import CreateView, ListView, TemplateView
 from django.views.generic import DetailView, UpdateView, DeleteView
 
 from dudes9 import settings
-from relation.forms import AddMemberForm, LeaveProjectForm
+from relation.forms import AddMemberForm, LeaveProjectForm, ChangePasswordForm
 from relation.models import Member, Relation
 
 
@@ -27,21 +28,30 @@ class MembersListView(ListView):
     paginate_by = settings.PAGINATION
     context_object_name = 'members'
     template_name = 'members.html'
-    queryset = Member.only_members()
+    queryset = Member.only_members().order_by('-date_joined')
+
+    def get(self, request, *args, **kwargs):
+        self.object_list = self.get_queryset()
+        if request.GET.get('order_by') and request.GET.get('reverse'):
+            self.object_list.query.order_by = ['-' + request.GET['order_by']]
+        elif request.GET.get('order_by'):
+            self.object_list.query.order_by = [request.GET['order_by']]
+        context = self.get_context_data()
+        return self.render_to_response(context)
 
 
-class ProfileView(DetailView):
+class MemberView(DetailView):
     model = Member
-    template_name = 'profile.html'
+    template_name = 'member.html'
 
 
 class MemberUpdate(UpdateView):
     model = Member
     template_name = 'member_update.html'
-    fields = ['username']
+    fields = ['username', 'image']
 
     def get_success_url(self):
-        return reverse_lazy('profile', kwargs={'pk': self.kwargs['pk']})
+        return reverse_lazy('member', kwargs={'pk': self.kwargs['pk']})
 
 
 class MemberDelete(DeleteView):
@@ -53,7 +63,19 @@ class MemberDelete(DeleteView):
 class MemberProjectsView(DetailView):
     model = Member
     template_name = 'member_projects.html'
-    queryset = Member.objects.prefetch_related('relation').all()
+
+    def get(self, request, *args, **kwargs):
+        if request.GET.get('order_by') and request.GET.get('reverse'):
+            order = '-' + request.GET['order_by']
+        elif request.GET.get('order_by'):
+            order = request.GET['order_by']
+        else:
+            order = 'id'
+        self.queryset = Member.objects.prefetch_related(
+            Prefetch('relation', Relation.objects.order_by(order),))
+        self.object = self.get_object()
+        context = self.get_context_data(object=self.object)
+        return self.render_to_response(context)
 
 
 class MemberLeftProject(DeleteView):
@@ -73,3 +95,12 @@ class MemberLeftProject(DeleteView):
 #     model = Member
 #     template_name = 'member_history.html'
 #     queryset = Member.objects.prefetch_related('relation').all()
+
+
+class ChangePasswordView(UpdateView):
+    model = Member
+    form_class = ChangePasswordForm
+    template_name = 'change_password_form.html'
+
+    def get_success_url(self):
+        return reverse_lazy('member', kwargs={'pk': self.kwargs['pk']})

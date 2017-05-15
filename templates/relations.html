@@ -3,23 +3,33 @@
 {% block meta_title %}Relations{% endblock meta_title %}
 
 {% block main_content %}
+    {% if user.is_staff %}
     <!-- Start Members Listing -->
+    {% with order_by=request.GET.order_by reverse=request.GET.reverse %}
     <table class="table table-hover table-striped">
         <thead>
             <tr>
-                <th> id </th>
-                <th> member </th>
-                <th> position </th>
-                <th> project </th>
-                <th> join </th>
-                <th> left </th>
+                <th> </th>
+                {% with 'id member position project date_joined date_left' as list %}
+                    {% for head in list.split %}
+                        <th>
+                            <a href="?order_by={{ head }}{% if order_by == head and reverse != '1' %}&amp;reverse=1{% endif %}">
+                                {{ head }} </a>
+                            {% if order_by == head and reverse != '1' %}&uarr;
+                            {% elif order_by == head and reverse == '1' %}&darr;
+                            {% endif %}
+                        </th>
+                    {% endfor %}
+                {% endwith %}
                 <th> action </th>
+            </tr>
         </thead>
         <tbody>
         {% for rel in relations %}
             <tr>
+                <td>{{ forloop.counter }}</td>
                 <td>{{ rel.pk }}</td>
-                <td><a href="{% url "profile" rel.member.id %}">{{ rel.member.username }}</a></td>
+                <td><a href="{% url "member" rel.member.id %}">{{ rel.member.username }}</a></td>
                 <td>{{ rel.position }}</td>
                 <td><a href="{% url "project_detail" rel.project.id %}">{{ rel.project.title }}</a></td>
                 <td>{{ rel.date_joined }}</td>
@@ -29,8 +39,11 @@
                         <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">action
                         <span class="caret"></span></button>
                         <ul class="dropdown-menu">
+                            {% if rel.date_left == None %}
+                                <li><a href="{% url "update_position" rel.pk %}">update position</a></li>
+                                <li><a href="{% url "leave_project" rel.pk %}">user leave</a></li>
+                            {% endif %}
                             <li><a href="{% url "delete_relation" rel.pk %}">delete</a></li>
-                            <li><a href="{% url "leave_project" rel.pk %}">user leave</a></li>
                         </ul>
                     </div>
                 </td>
@@ -40,5 +53,9 @@
         {% endfor %}
         </tbody>
     </table>
+    {% endwith %}
+    {% else %}
+        go to hell
+    {% endif %}
 <!-- End Members Listing -->
 {% endblock main_content %}

@@ -1,3 +1,4 @@
+from django.db.models import Prefetch
 from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy
 from django.utils import timezone
@@ -5,7 +6,7 @@ from django.views.generic import CreateView, ListView
 from django.views.generic import DetailView, UpdateView, DeleteView
 
 from dudes9 import settings
-from relation.forms import AddProjectForm, AddRelationForm, CloseProjectForm
+from relation.forms import AddProjectForm, CloseProjectForm
 from relation.models import Project, Relation
 
 
@@ -15,7 +16,16 @@ class ProjectsListView(ListView):
     paginate_by = settings.PAGINATION
     context_object_name = 'projects'
     template_name = 'projects.html'
-    queryset = Project.objects.prefetch_related('members', 'technologies').all()
+    queryset = Project.objects.prefetch_related('members', 'technologies').all().order_by('-start_date')
+
+    def get(self, request, *args, **kwargs):
+        self.object_list = self.get_queryset()
+        if request.GET.get('order_by') and request.GET.get('reverse'):
+            self.object_list.query.order_by = ['-' + request.GET['order_by']]
+        elif request.GET.get('order_by'):
+            self.object_list.query.order_by = [request.GET['order_by']]
+        context = self.get_context_data()
+        return self.render_to_response(context)
 
 
 class AddProjectView(CreateView):
@@ -28,7 +38,19 @@ class AddProjectView(CreateView):
 class ProjectDetailView(DetailView):
     model = Project
     template_name = 'project_detail.html'
-    queryset = Project.objects.prefetch_related('members', 'relation').all()
+
+    def get(self, request, *args, **kwargs):
+        if request.GET.get('order_by') and request.GET.get('reverse'):
+            order = '-' + request.GET['order_by']
+        elif request.GET.get('order_by'):
+            order = request.GET['order_by']
+        else:
+            order = 'id'
+        self.queryset = Project.objects.prefetch_related(
+            Prefetch('relation', Relation.objects.order_by(order),))
+        self.object = self.get_object()
+        context = self.get_context_data(object=self.object)
+        return self.render_to_response(context)
 
 
 class ProjectUpdateView(UpdateView):
@@ -64,24 +86,3 @@ class CloseProjectView(DeleteView):
             relation.date_left = project.end_date
             relation.save()
         return HttpResponseRedirect(self.get_success_url())
-
-
-class AddRelationView(CreateView):
-    model = Relation
-    form_class = AddRelationForm
-    template_name = 'add_relation_form.html'
-    success_url = reverse_lazy('projects')
-
-
-class RelationsListView(ListView):
-    model = Relation
-    page_title = 'Relations list'
-    paginate_by = settings.PAGINATION
-    context_object_name = 'relations'
-    template_name = 'relations.html'
-
-
-class DeleteRelationView(DeleteView):
-    model = Relation
-    template_name = 'delete_relation.html'
-    success_url = reverse_lazy('relations')

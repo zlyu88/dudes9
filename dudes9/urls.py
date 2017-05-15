@@ -26,6 +26,7 @@ urlpatterns = [
     url(r'^relation/', include([
         url(r'^', include('relation.urls')),
         url(r'^', include('project.urls')),
+        url(r'^', include('position.urls')),
         ])),
     url(r'^admin/', admin.site.urls),
 ]

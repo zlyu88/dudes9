@@ -123,7 +123,13 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-PAGINATION = 4
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, "static"),
+]
+
+PAGINATION = 10
 
 AUTH_USER_MODEL = 'relation.Member'
 LOGIN_REDIRECT_URL = reverse_lazy("index")

@@ -1,82 +1,84 @@
 {% extends "base.html" %}
 
+{% load static %}
+
 {% block meta_title %}{{ project.title }} details{% endblock meta_title %}
 
 {% block main_content %}
 
     <h4>{{ project.title }} project details</h4>
+    technologies:<br>
+    {% for tech in project.technologies.all %}
+        {{ tech.title }}<br>
+    {% empty %}
+            <p>No technologies yet</p>
+    {% endfor %}
 
+    {% with order_by=request.GET.order_by reverse=request.GET.reverse %}
     <table class="table table-hover table-striped">
         <thead>
             <tr>
-                <th> id </th>
-                <th> title </th>
-                <th> positions </th>
-                <th> members </th>
-                <th> technologies </th>
-                <th> start date </th>
-                <th> end date </th>
+                <th> </th>
+                <th> </th>
+                {% with 'member position date_joined date_left' as list %}
+                    {% for head in list.split %}
+                        <th>
+                            <a href="?order_by={{ head }}{% if order_by == head and reverse != '1' %}&amp;reverse=1{% endif %}">
+                                {{ head }} </a>
+                            {% if order_by == head and reverse != '1' %}&uarr;
+                            {% elif order_by == head and reverse == '1' %}&darr;
+                            {% endif %}
+                        </th>
+                    {% endfor %}
+                {% endwith %}
+                <th> action </th>
         </thead>
         <tbody>
-
-            <tr>
-                <td>{{ project.pk }}</td>
-                <td>{{ project.title }}</td>
+        {% for rel in project.relation.all %}
+        <tr>
+                <td>{{ forloop.counter }}</td>
                 <td>
-                    <div class="dropdown">
-                        <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">
-                            {{ project.positions.count }}
-                        <span class="caret"></span></button>
-                        <ul class="dropdown-menu">
-                            {% for position in project.positions %}
-                                <li><a href="#">{{ position.position }}</a></li>
-                            {% endfor %}
-                        </ul>
-                    </div>
-                </td>
-
-                <td>
-                    <div class="dropdown">
-                        <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">
-                            {{ project.active_relations.count }}
-                        <span class="caret"></span></button>
-                        <ul class="dropdown-menu">
-                            {% for relation in project.active_relations %}
-                                <li><a href="{% url "profile" relation.member.pk %}">
-                                    {{ relation.member.username }}</a></li>
-                            {% endfor %}
-                        </ul>
-                    </div>
-                </td>
-
-                <td>
-                    <div class="dropdown">
-                        <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">
-                            {{ project.technologies.all.count }}
-                        <span class="caret"></span></button>
-                        <ul class="dropdown-menu">
-                            {% for tech in project.technologies.all %}
-                                <li><a href="#">{{ tech.title }}</a></li>
-                            {% endfor %}
-                        </ul>
-                    </div>
-                </td>
-                <td>{{ project.start_date }}</td>
-                <td> {% if project.end_date %}
-                    {{ project.end_date }}
+                    {% if rel.member.image %}
+                        <a href="{% url "member" rel.member.id %}">
+                            <img height="30" width="30" src="/{{ rel.member.image }}"/>
+                        </a>
                     {% else %}
-                    <form action="{% url 'project_detail' project.pk %}" method="GET">
-                        <input type="submit" value="close project">
-                    </form>
+                        <img height="30" width="30" src="{% static "img/noimage.png" %}"/>
                     {% endif %}
                 </td>
-                <td><a href="#">{{ relation.member.delivery_center.location }}</a></td>
+                <td><a href="{% url "member" rel.member.id %}">{{ rel.member.username }}</a></td>
+                <td>{{ rel.position }}</td>
+                <td>{{ rel.date_joined }}</td>
+                <td>
+                {% if rel.date_left %}
+                    {{ rel.date_left }}
+                    {% else %}
+                    ---
+                    {% endif %}
+                </td>
+                <td>
+                    <div class="dropdown">
+                        <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">action
+                        <span class="caret"></span></button>
+                        <ul class="dropdown-menu">
+                            {% if rel.date_left == None %}
+                                <li><a href="{% url "update_position" rel.pk %}">update position</a></li>
+                                <li><a href="{% url "leave_project" rel.pk %}">user leave</a></li>
+                            {% endif %}
+                            <li><a href="{% url "delete_relation" rel.pk %}">delete</a></li>
+                        </ul>
+                    </div>
+                </td>
             </tr>
-
+        {% empty %}
+            <p>No members yet</p>
+        {% endfor %}
         </tbody>
     </table>
-
+    {% endwith %}
         <br>
+    {% if user.is_staff %}
         <a href="{% url "update_project" project.pk %}">update</a> |
         <a href="{% url "delete_project" project.pk %}">delete</a>
+    {% endif %}
 {% endblock main_content %}

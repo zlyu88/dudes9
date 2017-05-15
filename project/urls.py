@@ -12,8 +12,4 @@ urlpatterns = [
     url(r'^delete_project/(?P<pk>[0-9]+)/$', views.ProjectDeleteView.as_view(), name='delete_project'),
 
     url(r'^close_project/(?P<pk>[0-9]+)/$', views.CloseProjectView.as_view(), name='close_project'),
-
-    url(r'^add_relation/$', views.AddRelationView.as_view(), name='add_relation'),
-    url(r'^relations/$', views.RelationsListView.as_view(), name='relations'),
-    url(r'^delete_relation/(?P<pk>[0-9]+)/$', views.DeleteRelationView.as_view(), name='delete_relation'),
 ]

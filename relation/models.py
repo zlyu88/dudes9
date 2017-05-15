@@ -14,6 +14,7 @@ class Member(AbstractUser):
     location_choices = (('lviv', 'lviv'), ('kyiv', 'kyiv'))
     delivery_center = models.CharField(max_length=10, choices=location_choices, default='lviv')
     password = models.CharField(max_length=255)
+    image = models.ImageField(upload_to='static', null=True, blank=True)
 
     @staticmethod
     def only_members():
@@ -29,6 +30,9 @@ class Project(models.Model):
     technologies = models.ManyToManyField(Technology, db_constraint=False, related_name='projects')
     start_date = models.DateTimeField(default=timezone.now)
     end_date = models.DateTimeField(null=True)
+
+    def project_relations(self):
+        return Relation.objects.filter(project_id=self.id)
 
     def active_relations(self):
         return Relation.objects.filter(project_id=self.id, date_left=None)

@@ -5,23 +5,37 @@
 {% block main_content %}
 
     <h4>Projects list:</h4>
-
+    {% with order_by=request.GET.order_by reverse=request.GET.reverse %}
     <table class="table table-hover table-striped">
         <thead>
             <tr>
-                <th> id </th>
-                <th> title </th>
-                <th> positions </th>
-                <th> members </th>
-                <th> technologies </th>
-                <th> start date </th>
-                <th> end date </th>
+                <th> </th>
+                {% with 'title positions members technologies start_date end_date' as list %}
+                    {% for head in list.split %}
+                        <th>
+                            <a href="?order_by={{ head }}{% if order_by == head and reverse != '1' %}&amp;reverse=1{% endif %}">
+                                {{ head }} </a>
+                            {% if order_by == head and reverse != '1' %}&uarr;
+                            {% elif order_by == head and reverse == '1' %}&darr;
+                            {% endif %}
+                        </th>
+                    {% endfor %}
+                {% endwith %}
+            </tr>
+{#            <tr>#}
+{#                <th> </th>#}
+{#                <th> title </th>#}
+{#                <th> positions </th>#}
+{#                <th> members </th>#}
+{#                <th> technologies </th>#}
+{#                <th> start date </th>#}
+{#                <th> end date </th>#}
         </thead>
         <tbody>
         {% for project in projects %}
 
             <tr>
-                <td>{{ project.pk }}</td>
+                <td>{{ forloop.counter }}</td>
 
                 <td><a href="{% url "project_detail" project.pk %}">{{ project.title }}</a></td>
 
@@ -45,7 +59,7 @@
                         <span class="caret"></span></button>
                         <ul class="dropdown-menu">
                             {% for relation in project.active_relations %}
-                                <li><a href="{% url "profile" relation.member.pk %}">
+                                <li><a href="{% url "member" relation.member.pk %}">
                                     {{ relation.member.username }}</a></li>
                             {% endfor %}
                         </ul>
@@ -81,5 +95,5 @@
         {% endfor %}
         </tbody>
     </table>
-{#Relation.objects.filter(project__title__startswith='cl').values('position_id').distinct().count()#}
+    {% endwith %}
 {% endblock main_content %}
