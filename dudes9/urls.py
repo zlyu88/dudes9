@@ -22,7 +22,6 @@ from dudes9 import settings
 
 urlpatterns = [
     url(r'^$', RedirectView.as_view(url=reverse_lazy('index')), name='go-to-relation'),
-    # url(r'^relation/', include('relation.urls')),
     url(r'^relation/', include([
         url(r'^', include('relation.urls')),
         url(r'^', include('project.urls')),

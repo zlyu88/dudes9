@@ -104,3 +104,5 @@ class ChangePasswordView(UpdateView):
 
     def get_success_url(self):
         return reverse_lazy('member', kwargs={'pk': self.kwargs['pk']})
+
+

@@ -5,6 +5,7 @@
     <form action="{% url 'login' %}" method="post" enctype="multipart/form-data">
     {% csrf_token %}
     {{ form.as_p }}
+        <p><a href="{% url "password_reset" %}">forgot password?</a></p>
     <input type="submit" value="Submit">
     <input type="button" onclick="history.back();" value="Cancel">
     </form>

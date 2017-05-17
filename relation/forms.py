@@ -2,6 +2,7 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm, UsernameField, AuthenticationForm
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ObjectDoesNotExist
+from django.core.mail import EmailMessage
 from django.forms import ModelChoiceField, ModelMultipleChoiceField
 from django.utils import timezone
 
@@ -34,10 +35,39 @@ class AddMemberForm(UserCreationForm):
     username = forms.CharField(max_length=255, help_text='Required. Inform a valid username.')
     email = forms.EmailField(max_length=50, help_text='Required. Inform a valid email address.')
     image = forms.ImageField(required=False, label='Select a file')
+    password1 = forms.CharField(required=False, widget=forms.HiddenInput(), initial='1234qwer')
+    password2 = forms.CharField(required=False, widget=forms.HiddenInput(), initial='1234qwer')
 
     class Meta:
         model = Member
-        fields = ('delivery_center', 'username', 'email', 'password1', 'password2', 'image')
+        fields = ('delivery_center', 'username', 'email', 'image')
+
+    # def __init__(self, *args, **kwargs):
+    #     super(UserCreationForm, self).__init__(*args, **kwargs)
+    #     self.fields['password1'].required = False
+    #     self.fields['password2'].required = False
+    #     # If one field gets autocompleted but not the other, our 'neither
+    #     # password or both password' validation will be triggered.
+    #     self.fields['password1'].widget.attrs['autocomplete'] = 'off'
+    #     self.fields['password2'].widget.attrs['autocomplete'] = 'off'
+
+    def send_password(self, password):
+        data = {'username': self.cleaned_data["username"],
+                'password': password}
+        subject = 'Dudes9 temporary password'
+        body = 'Hi, {username}.\nHere is your temporary password for dudes9 {password}.\n' \
+               'Please login and change it you like.'.format(**data)
+        email = EmailMessage(subject, body, to=[self.cleaned_data["email"]])
+        email.send()
+
+    def save(self, commit=True):
+        user = super(AddMemberForm, self).save(commit=False)
+        password = Member.objects.make_random_password()
+        user.set_password(password)
+        if commit:
+            user.save()
+            self.send_password(password)
+        return user
 
 
 class AddProjectForm(forms.ModelForm):

@@ -1,0 +1,45 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Dudes9 {% block meta_title %}{% endblock meta_title %}</title>
+    <meta name="description" value="dudes9" />
+
+    <!-- Include Styles -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+<body>
+
+    <!-- Start Container -->
+    <div class="container">
+
+        <!-- Start Header -->
+        <div class="row" id="header">
+
+            <!-- Logo -->
+            <div class="col-xs-8">
+                <h1><a href="{% url 'index' %}">dudes9</a></h1>
+            </div>
+
+        </div>
+        <!-- End Header -->
+        <div>{% block main_content %}{% endblock main_content %}</div>
+            <hr>
+
+    </div>
+    <!-- End Container -->
+
+    <!-- Start Footer -->
+    <div class="row" id="footer">
+        <div class="col-xs-12">
+            &copy; 2017 dudes9
+        </div>
+    </div>
+    <!-- End Footer -->
+
+</body>
+</html>
