@@ -4,7 +4,7 @@
 
 {% block main_content %}
 {% if user.is_staff %}
-    <p>Add member</p>
+    <h3>Add member</h3>
         <form action="{% url 'add_member' %}" method="post" enctype="multipart/form-data">
             {% csrf_token %}
             {{ form.as_p }}

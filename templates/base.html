@@ -22,11 +22,20 @@
 
             <!-- Logo -->
             <div class="col-xs-8">
-                <h1><a href="{% url 'index' %}">dudes9</a></h1>
+                <h1><a href="{% url 'index' %}">
+                    <img height="80" src="/static/ball.jpg"/>
+                    dudes9</a>
+                </h1>
             </div>
             <div>
+                <a href="{% url "member" user.pk %}">
                 {% if user.is_authenticated %}
-                    {{ user.username }} |
+                    {% if user.image %}
+                        <img height="30" src="/{{ user.image }}"/>
+                    {% else %}
+                        <img height="30" src="{% static "img/noimage.png" %}"/>
+                    {% endif %}
+                    {{ user.username }}</a> |
                     <a href="{% url "logout" %}">logout</a>
                 {% else %}
                     <a href="{% url "login" %}">log in</a>

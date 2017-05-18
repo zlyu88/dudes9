@@ -25,6 +25,7 @@ urlpatterns = [
     # url(r'^member_history/(?P<pk>[0-9]+)/$', views.MemberHistoryView.as_view(), name='member_history'),
 
     url(r'^leave_project/(?P<pk>[0-9]+)/$', views.MemberLeftProject.as_view(), name='leave_project'),
+
     url(r'^change_password/(?P<pk>[0-9]+)/$', views.ChangePasswordView.as_view(), name='change_password'),
 
     url(r'^password/reset/$', password_reset, name='password_reset',

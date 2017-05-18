@@ -1,4 +1,4 @@
-from django.db.models import Prefetch
+from django.db.models import Prefetch, Case, When
 from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy
 from django.utils import timezone
@@ -18,9 +18,21 @@ class ProjectsListView(ListView):
     template_name = 'projects.html'
     queryset = Project.objects.prefetch_related('members', 'technologies').all().order_by('-start_date')
 
+    def extra_order(self, request):
+        pk_list = [obj.pk for obj in self.object_list]
+        if request.GET.get('reverse'):
+            pk_list.sort()
+        else:
+            pk_list.sort(reverse=True)
+        preserved = Case(*[When(pk=pk, then=pos) for pos, pk in enumerate(pk_list)])
+        queryset = Project.objects.filter(pk__in=pk_list).order_by(preserved)
+        return queryset
+
     def get(self, request, *args, **kwargs):
         self.object_list = self.get_queryset()
-        if request.GET.get('order_by') and request.GET.get('reverse'):
+        if request.GET.get('order_by') in ['positions', 'members', 'technologies']:
+            self.object_list = self.extra_order(request)
+        elif request.GET.get('order_by') and request.GET.get('reverse'):
             self.object_list.query.order_by = ['-' + request.GET['order_by']]
         elif request.GET.get('order_by'):
             self.object_list.query.order_by = [request.GET['order_by']]
