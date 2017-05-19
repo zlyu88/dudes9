@@ -48,12 +48,14 @@
             go to lists:<br>
             <a href="{% url "members" %}">members</a><br>
             <a href="{% url "projects" %}">projects</a><br>
+            <a href="{% url "technologies" %}">technologies</a><br>
 
             {% if user.is_staff %}
             <a href="{% url "relations" %}">relations</a><br>
             <br>
             <a href="{% url "add_member" %}">add member</a><br>
             <a href="{% url "add_project" %}">add project</a><br>
+            <a href="{% url "add_technology" %}">add technology</a><br>
             <a href="{% url "add_relation" %}">add relation</a><br>
             {% endif %}
 {#            <a href="{% url "contracts:list" %}">contracts</a><br>#}

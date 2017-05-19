@@ -20,7 +20,7 @@
             <tr>
                 <th> </th>
                 <th> </th>
-                {% with 'member position date_joined date_left' as list %}
+                {% with 'member position delivery_center date_joined date_left' as list %}
                     {% for head in list.split %}
                         <th>
                             <a href="?order_by={{ head }}{% if order_by == head and reverse != '1' %}&amp;reverse=1{% endif %}">
@@ -48,6 +48,7 @@
                 </td>
                 <td><a href="{% url "member" rel.member.id %}">{{ rel.member.username }}</a></td>
                 <td>{{ rel.position }}</td>
+                <td>{{ rel.member.delivery_center }}</td>
                 <td>{{ rel.date_joined }}</td>
                 <td>
                 {% if rel.date_left %}

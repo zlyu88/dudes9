@@ -1,10 +1,14 @@
 {% extends "base.html" %}
 
-{% block meta_title %}Projects{% endblock meta_title %}
+{% load static %}
+
+{% block meta_title %}{{ technology.title }}{% endblock meta_title %}
 
 {% block main_content %}
 
-    <h4>Projects list:</h4>
+    <p>projects with <strong>{{ technology.title }}</strong></p>
+
+    <!-- Start Member Projects Listing -->
     {% with order_by=request.GET.order_by reverse=request.GET.reverse %}
     <table class="table table-hover table-striped">
         <thead>
@@ -24,7 +28,7 @@
             </tr>
         </thead>
         <tbody>
-        {% for project in projects %}
+        {% for project in technology.active_projects %}
 
             <tr>
                 <td>{{ forloop.counter }}</td>
@@ -38,9 +42,7 @@
                         <span class="caret"></span></button>
                         <ul class="dropdown-menu">
                             {% for position in project.positions %}
-                                <li><a href="#">{{  position.position }}</a></li>
-                            {% empty %}
-                                <p>nothing yet</p>
+                                <li><a href="#">{{ position.position }}</a></li>
                             {% endfor %}
                         </ul>
                     </div>
@@ -55,8 +57,6 @@
                             {% for relation in project.active_relations %}
                                 <li><a href="{% url "member" relation.member.pk %}">
                                     {{ relation.member.username }}</a></li>
-                            {% empty %}
-                                <p>nothing yet</p>
                             {% endfor %}
                         </ul>
                     </div>
@@ -70,8 +70,6 @@
                         <ul class="dropdown-menu">
                             {% for tech in project.technologies.all %}
                                 <li><a href="#">{{ tech.title }}</a></li>
-                            {% empty %}
-                                <p>nothing yet</p>
                             {% endfor %}
                         </ul>
                     </div>
@@ -94,4 +92,9 @@
         </tbody>
     </table>
     {% endwith %}
+    {% if user.is_staff %}
+        <a href="{% url "update_technology" technology.pk %}">update</a>
+{#       | <a href="{% url "delete_project" project.pk %}">delete</a>#}
+    {% endif %}
+<!-- End Members Listing -->
 {% endblock main_content %}

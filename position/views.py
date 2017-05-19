@@ -36,6 +36,10 @@ class AddRelationView(CreateView):
     template_name = 'add_relation_form.html'
     success_url = reverse_lazy('relations')
 
+    def get(self, request, *args, **kwargs):
+        self.object = None
+        return super(AddRelationView, self).get(request, *args, **kwargs)
+
     def post(self, request, *args, **kwargs):
         time = str(timezone.now())
         self.object = None

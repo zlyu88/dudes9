@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+
+{% block meta_title %}Technologies{% endblock meta_title %}
+
+{% block main_content %}
+
+    <h4>Technologies list:</h4>
+    {% with order_by=request.GET.order_by reverse=request.GET.reverse %}
+    <table class="table table-hover table-striped">
+        <thead>
+            <tr>
+                <th> </th>
+                {% with 'title active_projects all_projects' as list %}
+                    {% for head in list.split %}
+                        <th>
+                            <a href="?order_by={{ head }}{% if order_by == head and reverse != '1' %}&amp;reverse=1{% endif %}">
+                                {{ head }} </a>
+                            {% if order_by == head and reverse != '1' %}&uarr;
+                            {% elif order_by == head and reverse == '1' %}&darr;
+                            {% endif %}
+                        </th>
+                    {% endfor %}
+                {% endwith %}
+            </tr>
+        </thead>
+        <tbody>
+        {% for tech in technologies %}
+
+            <tr>
+                <td>{{ forloop.counter }}</td>
+
+                <td><a href="{% url "technology_detail" tech.pk %}">{{ tech.title }}</a></td>
+
+                <td>
+                    <div class="dropdown">
+                        <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">
+                            {{ tech.active_projects.count }}
+                        <span class="caret"></span></button>
+                        <ul class="dropdown-menu">
+                            {% for project in tech.active_projects %}
+                                <li><a href="{% url "project_detail" project.pk %}">
+                                    {{ project.title }}</a></li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </td>
+
+                <td>
+                    <div class="dropdown">
+                        <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">
+                            {{ tech.projects.all.count }}
+                        <span class="caret"></span></button>
+                        <ul class="dropdown-menu">
+                            {% for project in tech.projects.all %}
+                                <li><a href="{% url "project_detail" project.pk %}">
+                                    {{ project.title }}</a></li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </td>
+
+            </tr>
+        {% empty %}
+            <p>Nothing yet</p>
+        {% endfor %}
+        </tbody>
+    </table>
+    {% endwith %}
+{% endblock main_content %}

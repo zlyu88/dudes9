@@ -117,3 +117,11 @@ class ChangePasswordForm(UserCreationForm):
         model = Member
         fields = ('username', 'password1', 'password2')
         widgets = {'username': forms.HiddenInput()}
+
+
+class AddTechnologyForm(forms.ModelForm):
+    title = forms.CharField(max_length=255, help_text='Required. Inform a valid technology title.')
+
+    class Meta:
+        model = Technology
+        fields = ('title',)

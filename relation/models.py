@@ -6,6 +6,12 @@ from django.utils import timezone
 class Technology(models.Model):
     title = models.CharField(unique=True, max_length=255)
 
+    def active_projects(self):
+        return self.projects.filter(end_date=None)
+
+    def na_projects(self):
+        return self.projects.exclude(end_date=None)
+
     def __str__(self):
         return self.title
 
@@ -30,9 +36,9 @@ class Project(models.Model):
     technologies = models.ManyToManyField(Technology, db_constraint=False, related_name='projects')
     start_date = models.DateTimeField(default=timezone.now)
     end_date = models.DateTimeField(null=True)
-
-    def project_relations(self):
-        return Relation.objects.filter(project_id=self.id)
+    #
+    # def project_relations(self):
+    #     return Relation.objects.filter(project_id=self.id)
 
     def active_relations(self):
         return Relation.objects.filter(project_id=self.id, date_left=None)
@@ -54,6 +60,10 @@ class Relation(models.Model):
     position = models.CharField(max_length=10, choices=position_choices, default='developer')
     date_joined = models.DateTimeField(default=timezone.now)
     date_left = models.DateTimeField(null=True)
+
+    def positions(self):
+        positions = [pair[0] for pair in self.position_choices]
+        return positions
 
     class Meta:
         unique_together = ('project', 'member', 'position')
