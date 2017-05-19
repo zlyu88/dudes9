@@ -42,10 +42,12 @@
                 <td>{{ relation.date_joined }}</td>
                 <td> {% if relation.date_left %}
                     {{ relation.date_left }}
+                    {% elif user.is_staff or user.pk == member.pk  %}
+                        <form action="{% url "leave_project" relation.pk %}" method="GET">
+                            <input type="submit" value="leave project">
+                        </form>
                     {% else %}
-                    <form action="{% url "leave_project" relation.pk %}" method="GET">
-                        <input type="submit" value="leave project">
-                    </form>
+                        ---
                     {% endif %}
                 </td>
             </tr>

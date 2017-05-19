@@ -79,10 +79,12 @@
 
                 <td> {% if project.end_date %}
                     {{ project.end_date }}
+                    {% elif user.is_staff %}
+                        <form action="{% url 'close_project' project.pk %}" method="GET">
+                            <input type="submit" value="close project">
+                        </form>
                     {% else %}
-                    <form action="{% url 'close_project' project.pk %}" method="GET">
-                        <input type="submit" value="close project">
-                    </form>
+                        ---
                     {% endif %}
                 </td>
             </tr>

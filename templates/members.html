@@ -6,6 +6,8 @@
 
 {% block main_content %}
     <!-- Start Members Listing -->
+
+    <h4>Members list:</h4>
     {% with order_by=request.GET.order_by reverse=request.GET.reverse %}
     <table class="table table-hover table-striped">
         <thead>
@@ -32,7 +34,9 @@
                 <td>{{ forloop.counter }}</td>
                 <td>
                     {% if member.image %}
-                        <img height="30" width="30" src="/{{ member.image }}"/>
+                        <a href="{% url "member" member.pk %}">
+                            <img height="30" width="30" src="/{{ member.image }}"/>
+                        </a>
                     {% else %}
                         <img height="30" width="30" src="{% static "img/noimage.png" %}"/>
                     {% endif %}

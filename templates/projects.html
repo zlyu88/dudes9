@@ -69,7 +69,8 @@
                         <span class="caret"></span></button>
                         <ul class="dropdown-menu">
                             {% for tech in project.technologies.all %}
-                                <li><a href="#">{{ tech.title }}</a></li>
+                                <li><a href="{% url "technology_detail" tech.pk %}">
+                                    {{ tech.title }}</a></li>
                             {% empty %}
                                 <p>nothing yet</p>
                             {% endfor %}
@@ -81,10 +82,12 @@
 
                 <td> {% if project.end_date %}
                     {{ project.end_date }}
+                    {% elif user.is_staff %}
+                        <form action="{% url 'close_project' project.pk %}" method="GET">
+                            <input type="submit" value="close project">
+                        </form>
                     {% else %}
-                    <form action="{% url 'close_project' project.pk %}" method="GET">
-                        <input type="submit" value="close project">
-                    </form>
+                        ---
                     {% endif %}
                 </td>
             </tr>

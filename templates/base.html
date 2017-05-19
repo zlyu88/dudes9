@@ -28,8 +28,8 @@
                 </h1>
             </div>
             <div>
-                <a href="{% url "member" user.pk %}">
                 {% if user.is_authenticated %}
+                    <a href="{% url "member" user.pk %}">
                     {% if user.image %}
                         <img height="30" src="/{{ user.image }}"/>
                     {% else %}
