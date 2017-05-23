@@ -6,7 +6,7 @@ from django.views.generic import CreateView, ListView, TemplateView
 from django.views.generic import DetailView, UpdateView, DeleteView
 
 from dudes9 import settings
-from relation.forms import AddMemberForm, LeaveProjectForm, ChangePasswordForm
+from relation.forms import AddMemberForm, LeaveProjectForm
 from relation.models import Member, Relation
 
 
@@ -32,10 +32,10 @@ class MembersListView(ListView):
 
     def get(self, request, *args, **kwargs):
         self.object_list = self.get_queryset()
-        if request.GET.get('order_by') and request.GET.get('reverse'):
-            self.object_list.query.order_by = ['-' + request.GET['order_by']]
-        elif request.GET.get('order_by'):
-            self.object_list.query.order_by = [request.GET['order_by']]
+        if request.GET.get('order_by'):
+            self.object_list.query.order_by = ['-' + request.GET['order_by']] if request.GET.get('reverse') \
+                else [request.GET['order_by']]
+
         context = self.get_context_data()
         return self.render_to_response(context)
 
@@ -95,14 +95,3 @@ class MemberLeftProject(DeleteView):
 #     model = Member
 #     template_name = 'member_history.html'
 #     queryset = Member.objects.prefetch_related('relation').all()
-
-
-class ChangePasswordView(UpdateView):
-    model = Member
-    form_class = ChangePasswordForm
-    template_name = 'change_password_form.html'
-
-    def get_success_url(self):
-        return reverse_lazy('member', kwargs={'pk': self.kwargs['pk']})
-
-

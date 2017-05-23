@@ -5,7 +5,7 @@
 {% block main_content %}
 {% if user.is_staff %}
     <h3>Add relation</h3>
-        <form action="{% url 'add_relation' %}" method="post" enctype="multipart/form-data">
+        <form action="{% url 'add_relation' 0 %}" method="post" enctype="multipart/form-data">
             {% csrf_token %}
             {{ form.as_p }}
             <input type="submit" value="Submit">

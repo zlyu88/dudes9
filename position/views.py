@@ -1,4 +1,3 @@
-from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy
 from django.utils import timezone
@@ -6,7 +5,7 @@ from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 
 from dudes9 import settings
 from relation.forms import UpdatePositionForm, AddRelationForm
-from relation.models import Relation
+from relation.models import Relation, Member, Project
 
 
 class PositionUpdateView(UpdateView):
@@ -38,25 +37,22 @@ class AddRelationView(CreateView):
 
     def get(self, request, *args, **kwargs):
         self.object = None
+        if not kwargs['pk'] == 0:
+            self.initial['project'] = Project.objects.filter(pk=kwargs['pk']).first()
         return super(AddRelationView, self).get(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
         time = str(timezone.now())
         self.object = None
 
-        try:
-            relation = Relation.objects.get(member_id=request.POST['member'], project=request.POST['project'],
-                                            date_left=None)
-        except ObjectDoesNotExist:
-            relation = None
+        relation = Relation.objects.filter(member_id=request.POST['member'],
+                                           project=request.POST['project'],
+                                           date_left=None).first()
 
         if relation and not relation.position == request.POST['position']:
             relation.date_left = time
             relation.save()
-
-            return super(AddRelationView, self).post(request, *args, **kwargs)
-        else:
-            return super(AddRelationView, self).post(request, *args, **kwargs)
+        return super(AddRelationView, self).post(request, *args, **kwargs)
 
 
 class RelationsListView(ListView):
@@ -69,10 +65,9 @@ class RelationsListView(ListView):
 
     def get(self, request, *args, **kwargs):
         self.object_list = self.get_queryset()
-        if request.GET.get('order_by') and request.GET.get('reverse'):
-            self.object_list.query.order_by = ['-' + request.GET['order_by']]
-        elif request.GET.get('order_by'):
-            self.object_list.query.order_by = [request.GET['order_by']]
+        if request.GET.get('order_by'):
+            self.object_list.query.order_by = ['-' + request.GET['order_by']] if request.GET.get('reverse') \
+                else [request.GET['order_by']]
         context = self.get_context_data()
         return self.render_to_response(context)
 
@@ -81,3 +76,35 @@ class DeleteRelationView(DeleteView):
     model = Relation
     template_name = 'delete_relation.html'
     success_url = reverse_lazy('relations')
+
+
+class DCDetailView(ListView):
+    model = Member
+    page_title = 'Members list'
+    paginate_by = settings.PAGINATION
+    context_object_name = 'members'
+    template_name = 'DC_detail.html'
+
+    def get(self, request, *args, **kwargs):
+        delivery_center = request.resolver_match.kwargs['slug']
+        self.object_list = Member.only_members().filter(delivery_center=delivery_center).order_by('-date_joined')
+        if request.GET.get('order_by'):
+            self.object_list.query.order_by = ['-' + request.GET['order_by']] if request.GET.get('reverse') \
+                else [request.GET['order_by']]
+        context = self.get_context_data()
+        return self.render_to_response(context)
+
+
+class DCListView(ListView):
+    model = Member
+    page_title = 'DC list'
+    paginate_by = settings.PAGINATION
+    context_object_name = 'members'
+    template_name = 'DC_list.html'
+
+    def get(self, request, *args, **kwargs):
+        self.object_list = Member.only_members().order_by('-date_joined')
+        delivery_centers = Member.locations()
+        request.content_params['numbers'] = [(x, Member.only_members().filter(delivery_center=x)) for x in delivery_centers]
+        context = self.get_context_data()
+        return self.render_to_response(context)

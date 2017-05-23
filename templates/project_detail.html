@@ -77,8 +77,11 @@
         </tbody>
     </table>
     {% endwith %}
-        <br>
     {% if user.is_staff %}
+        <form action="{% url 'add_relation' project.pk %}" method="GET">
+            <input type="submit" value="add relation">
+        </form>
+        <br>
         <a href="{% url "update_project" project.pk %}">update</a> |
         <a href="{% url "delete_project" project.pk %}">delete</a>
     {% endif %}

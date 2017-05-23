@@ -26,6 +26,11 @@ class Member(AbstractUser):
     def only_members():
         return Member.objects.filter(is_staff=0)
 
+    @staticmethod
+    def locations():
+        locations = [pair[0] for pair in Member.location_choices]
+        return locations
+
     def __str__(self):
         return self.username
 

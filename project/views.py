@@ -7,7 +7,7 @@ from django.views.generic import DetailView, UpdateView, DeleteView
 
 from dudes9 import settings
 from relation.forms import AddProjectForm, CloseProjectForm, AddTechnologyForm
-from relation.models import Project, Relation, Technology, Member
+from relation.models import Project, Relation, Technology
 
 
 class ProjectsListView(ListView):

@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block meta_title %}delivery center{% endblock meta_title %}
+
+{% block main_content %}
+
+{% with numbers=request.content_params.numbers %}
+
+<h4>Delivery centers list</h4>
+<table class="table table-hover table-striped">
+        <thead>
+            <tr>
+                <th> </th>
+                <th> location </th>
+                <th> members </th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for title, members in numbers %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td>
+                    <a href="{% url "delivery_center" title %}">{{ title }}</a></td>
+                </td>
+                <td>
+                    <div class="dropdown">
+                        <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">
+                            {{ members.count }}
+                        <span class="caret"></span></button>
+                        <ul class="dropdown-menu">
+                            {% for member in members %}
+                                <li><a href="{% url "member" member.pk %}">{{ member.username }}</a></li>
+                            {% empty %}
+                                <p>nothing yet</p>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </td>
+            </tr>
+        {% empty %}
+            <p>No delivery centers yet</p>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    {% endwith %}
+{% endblock main_content %}

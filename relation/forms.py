@@ -1,5 +1,5 @@
 from django import forms
-from django.contrib.auth.forms import UserCreationForm, UsernameField, AuthenticationForm
+from django.contrib.auth.forms import UserCreationForm, UsernameField, AuthenticationForm, PasswordChangeForm
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.mail import EmailMessage
@@ -111,12 +111,11 @@ class UpdatePositionForm(forms.ModelForm):
         fields = ('position',)
 
 
-class ChangePasswordForm(UserCreationForm):
+class ChangePasswordForm(PasswordChangeForm):
 
     class Meta:
         model = Member
-        fields = ('username', 'password1', 'password2')
-        widgets = {'username': forms.HiddenInput()}
+        fields = ('old_password', 'new_password1', 'new_password2')
 
 
 class AddTechnologyForm(forms.ModelForm):
