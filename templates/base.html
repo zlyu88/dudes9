@@ -9,58 +9,125 @@
 
     <!-- Include Styles -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link  rel="stylesheet" type="text/css" href={% static "css/style.css" %} />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </head>
-<body>
+<body id="myPage" data-spy="scroll" data-target=".navbar" data-offset="50">
+
+<nav class="navbar navbar-default navbar-fixed-top">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="{% url 'members' %}">dudes9</a>
+    </div>
+    <div class="collapse navbar-collapse" id="myNavbar">
+      <ul class="nav navbar-nav navbar-right">
+          <li>
+              {% if user.is_staff %}
+                  <img height="50" src="{% static "img/superpower.png" %}"/>
+              {% endif %}
+          </li>
+{#        <li><a href="{% url "members" %}">members</a></li>#}
+{#        <li><a href="{% url "projects" %}">projects</a></li>#}
+{#        <li><a href="{% url "technologies" %}">technologies</a></li>#}
+{#        <li><a href="{% url "delivery_centers" %}">locations</a></li>#}
+{#        <li class="dropdown">#}
+{#          <a class="dropdown-toggle" data-toggle="dropdown" href="#">more#}
+{#            <span class="caret"></span>#}
+{#          </a>#}
+{#          <ul class="dropdown-menu">#}
+{#            <li><a href="{% url "relations" %}">relations</a></li>#}
+{#            <li><a href="{% url "add_member" %}">add member</a></li>#}
+{#            <li><a href="{% url "add_project" %}">add project</a></li>#}
+{#            <li><a href="{% url "add_technology" %}">add technology</a></li>#}
+{#            <li><a href="{% url "add_relation" 0 %}">add relation</a></li>#}
+{#          </ul>#}
+{#        </li>#}
+{#        <li><a href="#"><span class="glyphicon glyphicon-search"></span></a></li>#}
+          {% if user.is_authenticated %}
+                <li><a href="{% url "member" user.pk %}">
+                {{ user.username }} </a></li>
+                <li><a href="{% url "logout" %}">logout</a></li>
+            {% else %}
+                <li><a href="{% url "login" %}">log in</a></li>
+            {% endif %}
+      </ul>
+    </div>
+  </div>
+</nav>
 
     <!-- Start Container -->
-    <div class="container">
+    <div class="container text-center">
 
         <!-- Start Header -->
         <div class="row" id="header">
 
             <!-- Logo -->
-            <div class="col-xs-8">
-                <h1><a href="{% url 'index' %}">
-                    <img height="80" src="/static/ball.jpg"/>
-                    dudes9</a>
-                </h1>
-            </div>
-            <div>
-                {% if user.is_authenticated %}
-                    <a href="{% url "member" user.pk %}">
-                    {% if user.image %}
-                        <img height="30" src="/{{ user.image }}"/>
-                    {% else %}
-                        <img height="30" src="{% static "img/noimage.png" %}"/>
-                    {% endif %}
-                    {{ user.username }}</a> |
-                    <a href="{% url "logout" %}">logout</a>
-                {% else %}
-                    <a href="{% url "login" %}">log in</a>
-                {% endif %}
-            </div>
+{#            <div class="col-xs-8">#}
+{#                <h1><a href="{% url 'index' %}">#}
+{#                    <img height="80" src="/static/ball.jpg"/>#}
+{#                    dudes9</a>#}
+{#                </h1>#}
+{#            </div>#}
+{#            <div>#}
+{#                {% if user.is_authenticated %}#}
+{#                    <a href="{% url "member" user.pk %}">#}
+{#                    {% if user.image %}#}
+{#                        <img height="30" src="/{{ user.image }}"/>#}
+{#                    {% else %}#}
+{#                        <img height="30" src="{% static "img/noimage.png" %}"/>#}
+{#                    {% endif %}#}
+{#                    {{ user.username }}</a> |#}
+{#                    <a href="{% url "logout" %}">logout</a>#}
+{#                {% else %}#}
+{#                    <a href="{% url "login" %}">log in</a>#}
+{#                {% endif %}#}
+{#            </div>#}
         </div>
         <!-- End Header -->
-        <div>{% block main_content %}{% endblock main_content %}</div>
-            <hr>
-            go to lists:<br>
-            <a href="{% url "members" %}">members</a><br>
-            <a href="{% url "projects" %}">projects</a><br>
-            <a href="{% url "technologies" %}">technologies</a><br>
-            <a href="{% url "delivery_centers" %}">delivery centers</a><br>
 
-            {% if user.is_staff %}
-            <a href="{% url "relations" %}">relations</a><br>
-            <br>
-            <a href="{% url "add_member" %}">add member</a><br>
-            <a href="{% url "add_project" %}">add project</a><br>
-            <a href="{% url "add_technology" %}">add technology</a><br>
-            <a href="{% url "add_relation" 0 %}">add relation</a><br>
-            {% endif %}
-{#            <a href="{% url "contracts:list" %}">contracts</a><br>#}
-{#            <a href="{% url "users" %}">users</a><br>#}
+        <!-- Start subheader -->
+        <div class="row" id="sub-header">
+            <div class="col-xs-12">
+                <ul class="nav nav-tabs" role="tablist">
+                <li role="presentation" {% if request.path == '/relation/members/' %}class="active"{% endif %}>
+                    <a href="{% url "members" %}">members</a></li>
+                <li role="presentation" {% if request.path == '/relation/projects/' %}class="active"{% endif %}>
+                    <a href="{% url "projects" %}">projects</a></li>
+                <li role="presentation" {% if request.path == '/relation/technologies/' %}class="active"{% endif %}>
+                    <a href="{% url "technologies" %}">technologies</a></li>
+                <li role="presentation" {% if request.path == '/relation/delivery_centers/' %}class="active"{% endif %}>
+                    <a href="{% url "delivery_centers" %}">locations</a></li>
+                {% if user.is_staff %}
+                    <li role="presentation" {% if request.path == '/relation/relations/' %}class="active"{% endif %}>
+                        <a href="{% url "relations" %}">relations</a></li>
+                {% endif %}
+                </ul>
+            </div>
+        </div>
+        <!-- End subheader -->
+
+         <div class="main_content">{% block main_content %}{% endblock main_content %}</div>
+            <hr>
+{#            go to lists:<br>#}
+{#            <a href="{% url "members" %}">members</a><br>#}
+{#            <a href="{% url "projects" %}">projects</a><br>#}
+{#            <a href="{% url "technologies" %}">technologies</a><br>#}
+{#            <a href="{% url "delivery_centers" %}">delivery centers</a><br>#}
+{##}
+{#            {% if user.is_staff %}#}
+{#            <a href="{% url "relations" %}">relations</a><br>#}
+{#            <br>#}
+{#            <a href="{% url "add_member" %}">add member</a><br>#}
+{#            <a href="{% url "add_project" %}">add project</a><br>#}
+{#            <a href="{% url "add_technology" %}">add technology</a><br>#}
+{#            <a href="{% url "add_relation" 0 %}">add relation</a><br>#}
+{#            {% endif %}#}
 
             {% if is_paginated %}
               <ul class="pagination">
@@ -88,15 +155,22 @@
     <!-- End Container -->
 
     <!-- Start Footer -->
-    <div class="row" id="footer">
-        <div class="col-xs-12">
-            &copy; 2017 dudes9
-        </div>
-    </div>
-    <!-- End Footer -->
+{#    <div class="row" id="footer">#}
+{#        <div class="col-xs-12">#}
+{#            &copy; 2017 dudes9#}
+{#        </div>#}
+{#    </div>#}
 
-    <!-- Javascripts Section -->
-{#    <script src={% static "js/script" %} type="text/javascript"></script>#}
+<footer class="text-center">
+  <a class="up-arrow" href="#myPage" data-toggle="tooltip" title="TO TOP">
+    <span class="glyphicon glyphicon-chevron-up"></span>
+  </a><br>
+  &copy; 2017 dudes9
+</footer>
+<!-- End Footer -->
+
+<!-- Javascripts Section -->
+<script src={% static "js/script.js" %} type="text/javascript"></script>
 
 </body>
 </html>

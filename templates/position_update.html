@@ -3,15 +3,21 @@
 {% block meta_title %}Update position{% endblock meta_title %}
 
 {% block main_content %}
-{% if user.is_staff or user.pk == member.pk%}
-    <h4>Do you really want member {{ relation.member.username }} to change {{ relation.position }} position?</h4>
-        <form action="{% url 'update_position' relation.pk %}" method="post" enctype="multipart/form-data">
-            {% csrf_token %}
-            {{ form.as_p }}
-            <input type="submit" value="Submit">
-            <input type="button" onclick="history.back();" value="Cancel">
-        </form>
-{% else %}
-    go to hell, bastard
-{% endif %}
+    <br>
+<div class="form">
+    <div class="container-fluid well">
+        {% if user.is_staff or user.pk == member.pk%}
+            <h4>Do you really want member <font color="#228b22">{{ relation.member.username }}</font>
+                to change <font color="#228b22">{{ relation.position }}</font> position?</h4>
+                <form action="{% url 'update_position' relation.pk %}" method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <input type="submit" value="Submit">
+                    <input type="button" onclick="history.back();" value="Cancel">
+                </form>
+        {% else %}
+            go to hell, bastard
+        {% endif %}
+    </div>
+</div>
 {% endblock main_content %}

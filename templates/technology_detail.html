@@ -6,10 +6,11 @@
 
 {% block main_content %}
 
-    <p>projects with <strong>{{ technology.title }}</strong></p>
+    <h4>projects with <font color="#228b22">{{ technology.title }}</font></h4>
 
     <!-- Start Member Projects Listing -->
     {% with order_by=request.GET.order_by reverse=request.GET.reverse %}
+    {% if technology.active_projects %}
     <table class="table table-hover table-striped">
         <thead>
             <tr>
@@ -27,6 +28,7 @@
                 {% endwith %}
             </tr>
         </thead>
+    {% endif %}
         <tbody>
         {% for project in technology.active_projects %}
 
@@ -96,7 +98,6 @@
     {% endwith %}
     {% if user.is_staff %}
         <a href="{% url "update_technology" technology.pk %}">update</a>
-{#       | <a href="{% url "delete_project" project.pk %}">delete</a>#}
     {% endif %}
 <!-- End Members Listing -->
 {% endblock main_content %}

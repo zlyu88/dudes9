@@ -8,7 +8,8 @@
 
     {% with order_by=request.GET.order_by reverse=request.GET.reverse slug=request.resolver_match.kwargs.slug %}
 
-    <h4>{{ slug }} delivery center</h4>
+    <h4><font color="#228b22">{{ slug }}</font> delivery center</h4>
+    {% if members %}
     <table class="table table-hover table-striped">
         <thead>
             <tr>
@@ -25,9 +26,9 @@
                         </th>
                     {% endfor %}
                 {% endwith %}
-                <th> action </th>
             </tr>
         </thead>
+    {% endif %}
         <tbody>
         {% for member in members %}
             <tr>
@@ -62,5 +63,19 @@
         {% endfor %}
         </tbody>
     </table>
+<hr>
+
+<div id="flip">Check out map</div>
+<div id="panel">
+    <!-- Map -->
+    <section id="contact" class="map">
+        {% if slug == 'Lviv' %}
+            <iframe width="100%" height="100%" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d643.2596216750904!2d24.02488088814345!3d49.84173436358596!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x473add723ceb5995%3A0xd5800038ea98b6fa!2sAkademika+Hnatyuka+Street%2C+12%2C+L&#39;viv%2C+Lviv+Oblast%2C+Ukraine!5e0!3m2!1sen!2sus!4v1495788594932"></iframe>
+        {% else %}
+            <iframe width="100%" height="100%" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d10174.347633058593!2d30.475347941772476!3d50.39289879180242!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0xde163908c59ba479!2z0JvQldCS0JggOSDQo9Ca0KDQkNCY0J3QkCDQntCe0J4!5e0!3m2!1suk!2sua!4v1495789189574"></iframe>
+        {% endif %}
+    </section>
+    <!-- End Map -->
+</div>
     {% endwith %}
 {% endblock main_content %}

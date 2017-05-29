@@ -3,15 +3,20 @@
 {% block meta_title %}Update technology{% endblock meta_title %}
 
 {% block main_content %}
-{% if user.is_staff %}
-    <h4>Update technology {{ project.title }}?</h4>
-<form action="{% url 'update_technology' technology.pk %}" method="post" enctype="multipart/form-data">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <input type="submit" value="Submit">
-    <input type="button" onclick="history.back();" value="Cancel">
-</form>
-{% else %}
-    go to hell, bastard
-{% endif %}
+    <br>
+<div class="form">
+    <div class="container-fluid well">
+        {% if user.is_staff %}
+            <h4>Update technology <font color="#228b22">{{ technology.title }}</font>?</h4>
+        <form action="{% url 'update_technology' technology.pk %}" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <input type="submit" value="Submit">
+            <input type="button" onclick="history.back();" value="Cancel">
+        </form>
+        {% else %}
+            go to hell, bastard
+        {% endif %}
+    </div>
+</div>
 {% endblock main_content %}

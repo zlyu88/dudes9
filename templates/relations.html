@@ -6,6 +6,8 @@
     {% if user.is_staff %}
     <!-- Start Members Listing -->
     {% with order_by=request.GET.order_by reverse=request.GET.reverse %}
+
+    <h4>Relations</h4>
     <table class="table table-hover table-striped">
         <thead>
             <tr>
@@ -21,7 +23,7 @@
                         </th>
                     {% endfor %}
                 {% endwith %}
-                <th> action </th>
+                <th> delivery center </th>
             </tr>
         </thead>
         <tbody>
@@ -33,7 +35,15 @@
                 <td>{{ rel.position }}</td>
                 <td><a href="{% url "project_detail" rel.project.id %}">{{ rel.project.title }}</a></td>
                 <td>{{ rel.date_joined }}</td>
-                <td>{{ rel.date_left }}</td>
+                <td>
+                    {% if rel.date_left %}
+                        {{ rel.date_left }}
+                    {% else %}
+                        ---
+                    {% endif %}
+                </td>
+                <td><a href="{% url "delivery_center" rel.member.delivery_center.title %}">
+                    {{ rel.member.delivery_center.title }}</a></td>
                 <td>
                     <div class="dropdown">
                         <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">action
@@ -53,6 +63,11 @@
         {% endfor %}
         </tbody>
     </table>
+        <div class="left_hand">
+            <form action="{% url 'add_relation' %}" method="GET">
+                <input type="submit" value="add relation">
+            </form>
+        </div>
     {% endwith %}
     {% else %}
         go to hell, bastard

@@ -48,7 +48,7 @@ class MemberView(DetailView):
 class MemberUpdate(UpdateView):
     model = Member
     template_name = 'member_update.html'
-    fields = ['username', 'image']
+    fields = ['username', 'email', 'image']
 
     def get_success_url(self):
         return reverse_lazy('member', kwargs={'pk': self.kwargs['pk']})
@@ -70,7 +70,7 @@ class MemberProjectsView(DetailView):
         elif request.GET.get('order_by'):
             order = request.GET['order_by']
         else:
-            order = 'id'
+            order = '-id'
         self.queryset = Member.objects.prefetch_related(
             Prefetch('relation', Relation.objects.order_by(order),))
         self.object = self.get_object()

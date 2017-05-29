@@ -6,15 +6,16 @@
 
 {% block main_content %}
 
-    <h4>{{ project.title }} project details</h4>
-    technologies:<br>
+    <h4><font color="#228b22">{{ project.title }}</font> project details</h4>
+    <strong>technologies:</strong><br>
     {% for tech in project.technologies.all %}
-        {{ tech.title }}<br>
+        <a href="{% url "technology_detail" tech.pk %}">{{ tech.title }}</a><br>
     {% empty %}
             <p>No technologies yet</p>
     {% endfor %}
-
+    <br>
     {% with order_by=request.GET.order_by reverse=request.GET.reverse %}
+    {% if project.relation.all %}
     <table class="table table-hover table-striped">
         <thead>
             <tr>
@@ -31,8 +32,8 @@
                         </th>
                     {% endfor %}
                 {% endwith %}
-                <th> action </th>
         </thead>
+    {% endif %}
         <tbody>
         {% for rel in project.relation.all %}
         <tr>
@@ -57,19 +58,21 @@
                     ---
                     {% endif %}
                 </td>
-                <td>
-                    <div class="dropdown">
-                        <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">action
-                        <span class="caret"></span></button>
-                        <ul class="dropdown-menu">
-                            {% if rel.date_left == None %}
-                                <li><a href="{% url "update_position" rel.pk %}">update position</a></li>
-                                <li><a href="{% url "leave_project" rel.pk %}">user leave</a></li>
-                            {% endif %}
-                            <li><a href="{% url "delete_relation" rel.pk %}">delete</a></li>
-                        </ul>
-                    </div>
-                </td>
+                {% if user.is_staff %}
+                    <td>
+                        <div class="dropdown">
+                            <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">action
+                            <span class="caret"></span></button>
+                            <ul class="dropdown-menu">
+                                {% if rel.date_left == None %}
+                                    <li><a href="{% url "update_position" rel.pk %}">update position</a></li>
+                                    <li><a href="{% url "leave_project" rel.pk %}">user leave</a></li>
+                                {% endif %}
+                                <li><a href="{% url "delete_relation" rel.pk %}">delete</a></li>
+                            </ul>
+                        </div>
+                    </td>
+                {% endif %}
             </tr>
         {% empty %}
             <p>No members yet</p>
@@ -78,9 +81,13 @@
     </table>
     {% endwith %}
     {% if user.is_staff %}
-        <form action="{% url 'add_relation' project.pk %}" method="GET">
-            <input type="submit" value="add relation">
-        </form>
+        {% if not project.end_date  %}
+            <div class="left_hand">
+                <form action="{% url 'add_relation' project.pk %}" method="GET">
+                    <input type="submit" value="add relation">
+                </form>
+            </div>
+        {% endif %}
         <br>
         <a href="{% url "update_project" project.pk %}">update</a> |
         <a href="{% url "delete_project" project.pk %}">delete</a>

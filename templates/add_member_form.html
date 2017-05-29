@@ -3,16 +3,21 @@
 {% block meta_title %}Add member{% endblock meta_title %}
 
 {% block main_content %}
-{% if user.is_staff %}
-    <h3>Add member</h3>
-        <form action="{% url 'add_member' %}" method="post" enctype="multipart/form-data">
-            {% csrf_token %}
-            {{ form.as_p }}
-            <input type="submit" value="Submit">
-            <input type="button" onclick="history.back();" value="Cancel">
-        </form>
-{% else %}
-    go to hell, bastard
-{% endif %}
+    <br>
+<div class="form">
+    <div class="container-fluid well">
+        {% if user.is_staff %}
+            <h3>Add member</h3>
+                <form action="{% url 'add_member' %}" method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <input type="submit" value="Submit">
+                    <input type="button" onclick="history.back();" value="Cancel">
+                </form>
+        {% else %}
+            go to hell, bastard
+        {% endif %}
+    </div>
+</div>
 
 {% endblock main_content %}

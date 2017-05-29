@@ -1,11 +1,13 @@
 {% extends "base.html" %}
 
 {% block main_content %}
-
-    {% if user.is_authenticated %}
-        <p>Welcome, <font color="blue"><i>{{ user.username }}</i></font>.</p>
-    {% else %}
-        <p>Welcome. Please log in</p>
-    {% endif %}
-
+    <br>
+    <div class="left_hand">
+        {% if user.is_authenticated %}
+            <p>Welcome, <i><a href="{% url "member" user.id %}">
+                {{ user.username }}</a></i>.</p>
+        {% else %}
+            <p>Welcome. Please log in</p>
+        {% endif %}
+    </div>
 {% endblock main_content %}

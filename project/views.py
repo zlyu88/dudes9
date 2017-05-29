@@ -60,7 +60,7 @@ class ProjectDetailView(DetailView):
 
     def get(self, request, *args, **kwargs):
         if request.GET.get('order_by') == 'delivery_center':
-            order = 'id'
+            order = '-id'
             relations = Relation.objects.filter(project__pk=self.kwargs['pk'])
             pk_list = [[rel.pk, rel.member.delivery_center] for rel in relations]
             if request.GET.get('reverse'):
@@ -74,7 +74,7 @@ class ProjectDetailView(DetailView):
         elif request.GET.get('order_by'):
             order = request.GET['order_by']
         else:
-            order = 'id'
+            order = '-id'
         self.queryset = Project.objects.prefetch_related(
             Prefetch('relation', Relation.objects.order_by(order),))
         self.object = self.get_object()
@@ -112,7 +112,7 @@ class CloseProjectView(DeleteView):
         self.object.save()
 
         project = self.object
-        relations = Relation.objects.filter(project_id=project.id)
+        relations = Relation.objects.filter(project_id=project.id, date_left=None)
         for relation in relations:
             relation.date_left = project.end_date
             relation.save()
@@ -186,13 +186,13 @@ class TechnologyDetailView(DetailView):
 
     def get(self, request, *args, **kwargs):
         if request.GET.get('order_by') in ['positions', 'members', 'technologies']:
-            order, extra_order = 'id', self.extra_order(request)
+            order, extra_order = '-id', self.extra_order(request)
         elif request.GET.get('order_by') and request.GET.get('reverse'):
             order = '-' + request.GET['order_by']
         elif request.GET.get('order_by'):
             order = request.GET['order_by']
         else:
-            order = 'id'
+            order = '-id'
         self.queryset = Technology.objects.prefetch_related(
             Prefetch('projects', Project.objects.order_by(order),))
         self.object = self.get_object()

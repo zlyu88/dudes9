@@ -3,6 +3,7 @@ from django.contrib.auth.forms import UserCreationForm, UsernameField, Authentic
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.mail import EmailMessage
+from django.db import transaction
 from django.forms import ModelChoiceField, ModelMultipleChoiceField
 from django.utils import timezone
 
@@ -69,19 +70,18 @@ class AddProjectForm(forms.ModelForm):
         model = Relation
         fields = ('title', 'technologies')
 
-    def save(self):
+    @transaction.atomic
+    def save(self, **kwargs):
         data = self.cleaned_data
         project = Project(title=data['title'], start_date=str(timezone.now()))
         project.save()
-        for tech in data['technologies']:
-            project.technologies.add(tech)
-        project.save()
+        project.technologies.add(*[tech for tech in data['technologies']])
         return project
 
 
 class AddRelationForm(forms.ModelForm):
     member = ModelChoiceField(queryset=Member.objects.all(), help_text='Required. Inform a valid member.')
-    project = ModelChoiceField(queryset=Project.objects.all(), help_text='Required. Inform a valid project.')
+    project = ModelChoiceField(queryset=Project.objects.filter(end_date=None), help_text='Required. Inform a valid project.')
 
     class Meta:
         model = Relation

@@ -19,9 +19,8 @@ class PositionUpdateView(UpdateView):
 
         self.object = self.get_object()
 
-        old_relation = Relation.objects.get(pk=self.object.pk)
-        old_relation.date_left = time
-        old_relation.save()
+        Relation.objects.get(pk=self.object.pk).update(date_left=time)
+        # old_relation.update(date_left=time)
 
         new_relation = Relation(member=self.object.member, position=request.POST['position'],
                                 project=self.object.project, date_joined=time)
@@ -37,7 +36,7 @@ class AddRelationView(CreateView):
 
     def get(self, request, *args, **kwargs):
         self.object = None
-        if not kwargs['pk'] == 0:
+        if kwargs.get('pk'):
             self.initial['project'] = Project.objects.filter(pk=kwargs['pk']).first()
         return super(AddRelationView, self).get(request, *args, **kwargs)
 
@@ -50,8 +49,7 @@ class AddRelationView(CreateView):
                                            date_left=None).first()
 
         if relation and not relation.position == request.POST['position']:
-            relation.date_left = time
-            relation.save()
+            relation.update(date_left=time)
         return super(AddRelationView, self).post(request, *args, **kwargs)
 
 

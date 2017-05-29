@@ -6,7 +6,7 @@
 
 {% block main_content %}
 
-    <p>{{ member.username }} projects</p>
+    <h4><font color="#228b22">{{ member.username }}</font> projects</h4>
     {% if member.image %}
         <img height="150" src="/{{ member.image }}"/>
     {% else %}
@@ -14,6 +14,7 @@
     {% endif %}
     <!-- Start Member Projects Listing -->
     {% with order_by=request.GET.order_by reverse=request.GET.reverse %}
+    {% if member.relation.all %}
     <table class="table table-hover table-striped">
         <thead>
             <tr>
@@ -31,6 +32,7 @@
                 {% endwith %}
             </tr>
         </thead>
+    {% endif %}
         <tbody>
         {% for relation in member.relation.all %}
 

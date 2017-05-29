@@ -3,15 +3,21 @@
 {% block meta_title %}Left project{% endblock meta_title %}
 
 {% block main_content %}
-{% if user.is_staff or user.pk == member.pk%}
-    <h4>Do you really want member {{ relation.member.username }} to leave {{ relation.project.title }} project?</h4>
-        <form action="{% url 'leave_project' relation.pk %}" method="post" enctype="multipart/form-data">
-            {% csrf_token %}
-            {{ form.as_p }}
-            <input type="submit" value="Submit">
-            <input type="button" onclick="history.back();" value="Cancel">
-        </form>
-{% else %}
-    go to hell, bastard
-{% endif %}
+    <br>
+<div class="form">
+    <div class="container-fluid well">
+        {% if user.is_staff or user.pk == member.pk%}
+            <h4>Do you really want member <font color="#228b22">{{ relation.member.username }}</font>
+                to leave <font color="#228b22">{{ relation.project.title }}</font> project?</h4>
+                <form action="{% url 'leave_project' relation.pk %}" method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <input type="submit" value="Submit">
+                    <input type="button" onclick="history.back();" value="Cancel">
+                </form>
+        {% else %}
+            go to hell, bastard
+        {% endif %}
+    </div>
+</div>
 {% endblock main_content %}
