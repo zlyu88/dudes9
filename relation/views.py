@@ -19,7 +19,7 @@ class AddMemberView(CreateView):
     model = Member
     form_class = AddMemberForm
     template_name = 'add_member_form.html'
-    success_url = reverse_lazy('index')
+    success_url = reverse_lazy('members')
 
 
 class MembersListView(ListView):

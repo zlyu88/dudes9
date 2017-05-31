@@ -1,5 +1,6 @@
 .container {
     padding: 80px 120px;
+    min-height: calc(100vh - 80px);
 }
 
 .navbar {
@@ -17,7 +18,7 @@
 }
 
 /* On hover, the links will turn white */
-.navbar-nav li a:hover {
+.navbar-nav li a:hover, .navbar-brand:hover  {
     color: #fff !important;
 }
 
@@ -30,6 +31,31 @@
 /* Remove border color from the collapsible button */
 .navbar-default .navbar-toggle {
     border-color: transparent;
+}
+
+.pagination .active span {
+    z-index: 3;
+    color: #fff;
+    cursor: default;
+    background-color: #29292c;
+    border-color: #29292c;
+}
+
+.pagination .active span:hover {
+    z-index: 3;
+    color: #fff;
+    cursor: default;
+    background-color: #29292c;
+    border-color: #29292c;
+}
+
+.pagination li.active a {
+    color: #29292c;
+    background-color: #aabbbb;
+}
+
+.pagination li a {
+    color: #273649;
 }
 
 /*!* Dropdown *!*/
@@ -73,21 +99,20 @@ body th {
 footer {
     background-color: #2d2d30;
     color: #f5f5f5;
+    padding: 10px;
     /**/
-    position: absolute;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    /**/
-    padding: 30px;
+    position: static;
+    /*right: 0;*/
+    /*bottom: 0;*/
+    /*left: 0;*/
 }
 
 footer a {
-    color: #f5f5f5;
+    color: #777;
 }
 
 footer a:hover {
-    color: #777;
+    color: #fff;
     text-decoration: none;
 }
 
@@ -120,4 +145,9 @@ footer a:hover {
 
 .form h3 {
     text-align: center;
+}
+
+.member_img {
+    height: 280px;
+    width: 280px;
 }

@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'debug_toolbar',
     'relation',
+    'mathfilters',
 ]
 
 MIDDLEWARE = [
@@ -129,7 +130,7 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),
 ]
 
-PAGINATION = 10
+PAGINATION = 30
 
 AUTH_USER_MODEL = 'relation.Member'
 LOGIN_REDIRECT_URL = reverse_lazy("index")

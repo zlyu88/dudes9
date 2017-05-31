@@ -1,5 +1,5 @@
+//Show and hide map
 $(document).ready(function(){
-    // Initialize Tooltip
     $('[data-toggle="tooltip"]').tooltip();
 })
 
@@ -9,6 +9,7 @@ $(document).ready(function(){
     });
 });
 
-$('.whatever').on('click','#enlarge', function(){
+//Show image original size
+$('.member_img').on('click','#enlarge', function(){
     window.open($(this).attr('src'));
 });

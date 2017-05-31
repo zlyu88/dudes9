@@ -19,6 +19,7 @@ class Technology(models.Model):
 class Member(AbstractUser):
     location_choices = (('Lviv', 'Lviv'), ('Kyiv', 'Kyiv'))
     delivery_center = models.CharField(max_length=10, choices=location_choices, default='Lviv')
+    email = models.EmailField(unique=True)
     password = models.CharField(max_length=255)
     image = models.ImageField(upload_to='static', null=True, blank=True)
 

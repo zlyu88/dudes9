@@ -10,8 +10,8 @@
 	<div class="profile">
         <div class="col-xs-4" >
             {% if member.image %}
-                <div class="whatever">
-                    <img id="enlarge" height="280" src="/{{ member.image }}"/>
+                <div class="member_img">
+                    <img id="enlarge" style='height: 280px; width: 280px; object-fit: contain'  src="/{{ member.image }}"/>
                 </div>
             {% else %}
                 <img height="280" src="{% static "img/noimage.png" %}"/>
@@ -19,7 +19,7 @@
         </div>
 
         <div class="col-xs-8">
-            <h3><font color="#228b22">{{ member.username }}</font></h3>
+            <h3><font color="#228b22">{{ member.username }}</font> profile</h3>
             <h5>email: {{ member.email }}</h5>
             <h5>location: <a href="{% url "delivery_center" member.delivery_center %}">
                 {{ member.delivery_center }}</a></h5>

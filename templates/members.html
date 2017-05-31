@@ -2,6 +2,8 @@
 
 {% load static %}
 
+{% load mathfilters %}
+
 {% block meta_title %}Members{% endblock meta_title %}
 
 {% block main_content %}
@@ -29,7 +31,7 @@
         <tbody>
         {% for member in members %}
             <tr>
-                <td>{{ forloop.counter }}</td>
+                <td>{{ page_obj.number|add:-1|mul:page_obj.paginator.per_page|add:forloop.counter }}</td>
                 <td>
                     {% if member.image %}
                         <a href="{% url "member" member.pk %}">
