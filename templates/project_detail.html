@@ -6,7 +6,7 @@
 
 {% block main_content %}
 
-    <h4><font color="#228b22">{{ project.title }}</font> project details</h4>
+    <h4><font color="#228b22">{{ project.title|title }}</font> project details</h4>
     <strong>technologies:</strong><br>
     {% for tech in project.technologies.all %}
         <a href="{% url "technology_detail" tech.pk %}">{{ tech.title }}</a><br>

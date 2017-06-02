@@ -33,8 +33,10 @@ class EmailLoginForm(AuthenticationForm):
 
 
 class AddMemberForm(UserCreationForm):
-    username = forms.CharField(max_length=255, help_text='Required. Inform a valid username.')
-    email = forms.EmailField(max_length=50, help_text='Required. Inform a valid email address.')
+    username = forms.CharField(max_length=255, widget=forms.TextInput(attrs={'class': 'form-control',
+                                                                             'placeholder': 'Username'}))
+    email = forms.EmailField(max_length=50, widget=forms.TextInput(attrs={'class': 'form-control',
+                                                                          'placeholder': 'Email'}))
     image = forms.ImageField(required=False, label='Select a file')
     password1 = forms.CharField(required=False, widget=forms.HiddenInput(), initial='1234qwer')
     password2 = forms.CharField(required=False, widget=forms.HiddenInput(), initial='1234qwer')
@@ -63,8 +65,10 @@ class AddMemberForm(UserCreationForm):
 
 
 class AddProjectForm(forms.ModelForm):
-    title = forms.CharField(max_length=255, help_text='Required. Inform a valid project title.')
-    technologies = ModelMultipleChoiceField(queryset=Technology.objects.all())
+    title = forms.CharField(max_length=255, widget=forms.TextInput(attrs={'class': 'form-control',
+                                                                          'placeholder': 'Project title'}))
+    technologies = ModelMultipleChoiceField(queryset=Technology.objects.all(),
+                                            widget=forms.CheckboxSelectMultiple, label='Project technologies:')
 
     class Meta:
         model = Relation
@@ -80,8 +84,10 @@ class AddProjectForm(forms.ModelForm):
 
 
 class AddRelationForm(forms.ModelForm):
-    member = ModelChoiceField(queryset=Member.objects.all(), help_text='Required. Inform a valid member.')
-    project = ModelChoiceField(queryset=Project.objects.filter(end_date=None), help_text='Required. Inform a valid project.')
+    member = ModelChoiceField(queryset=Member.objects.all(),
+                              help_text='Required. Inform a valid member.')
+    project = ModelChoiceField(queryset=Project.objects.filter(end_date=None),
+                               help_text='Required. Inform a valid project.')
 
     class Meta:
         model = Relation
@@ -119,7 +125,8 @@ class ChangePasswordForm(PasswordChangeForm):
 
 
 class AddTechnologyForm(forms.ModelForm):
-    title = forms.CharField(max_length=255, help_text='Required. Inform a valid technology title.')
+    title = forms.CharField(max_length=255, widget=forms.TextInput(attrs={'class': 'form-control',
+                                                                          'placeholder': 'Technology title'}))
 
     class Meta:
         model = Technology

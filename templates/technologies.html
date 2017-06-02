@@ -1,5 +1,7 @@
 {% extends "base.html" %}
 
+{% load mathfilters %}
+
 {% block meta_title %}Technologies{% endblock meta_title %}
 
 {% block main_content %}
@@ -27,7 +29,7 @@
         {% for tech in technologies %}
 
             <tr>
-                <td>{{ forloop.counter }}</td>
+                <td>{{ page_obj.number|add:-1|mul:page_obj.paginator.per_page|add:forloop.counter }}</td>
 
                 <td><a href="{% url "technology_detail" tech.pk %}">{{ tech.title }}</a></td>
 

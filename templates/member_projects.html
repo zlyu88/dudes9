@@ -6,7 +6,7 @@
 
 {% block main_content %}
 
-    <h4><font color="#228b22">{{ member.username }}</font> projects</h4>
+    <h4><font color="#228b22">{{ member.username|title }}</font> projects</h4>
     {% if member.image %}
         <img height="150" src="/{{ member.image }}"/>
     {% else %}

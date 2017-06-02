@@ -19,7 +19,7 @@
         </div>
 
         <div class="col-xs-8">
-            <h3><font color="#228b22">{{ member.username }}</font> profile</h3>
+            <h3><font color="#228b22">{{ member.username|title }}</font> profile</h3>
             <h5>email: {{ member.email }}</h5>
             <h5>location: <a href="{% url "delivery_center" member.delivery_center %}">
                 {{ member.delivery_center }}</a></h5>

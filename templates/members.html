@@ -46,16 +46,19 @@
                 <td>{{ member.email }}</td>
                 <td>{{ member.date_joined }}</td>
                 <td>
-                    <div class="dropdown">
-                        <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">go to
-                        <span class="caret"></span></button>
-                        <ul class="dropdown-menu">
+                    <form action="{% url "member_projects" member.pk %}" method="GET">
+                        <input type="submit" value="projects">
+                    </form>
+{#                    <div class="dropdown">#}
+{#                        <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">go to#}
+{#                        <span class="caret"></span></button>#}
+{#                        <ul class="dropdown-menu">#}
 {#                            <li><a href="{% url "member_positions" member.pk %}">positions</a></li>#}
-                            <li><a href="{% url "member_projects" member.pk %}">projects</a></li>
-                            <li><a href="#">history</a></li>
-
-                        </ul>
-                    </div>
+{#                            <li><a href="{% url "member_projects" member.pk %}">projects</a></li>#}
+{#                            <li><a href="#">history</a></li>#}
+{##}
+{#                        </ul>#}
+{#                    </div>#}
                 </td>
             </tr>
         {% empty %}

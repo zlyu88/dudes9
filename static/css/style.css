@@ -151,3 +151,11 @@ footer a:hover {
     height: 280px;
     width: 280px;
 }
+
+ul {
+    list-style-type: none;
+}
+
+.buttonHolder {
+    text-align: center;
+}

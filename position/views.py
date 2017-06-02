@@ -101,8 +101,8 @@ class DCListView(ListView):
     template_name = 'DC_list.html'
 
     def get(self, request, *args, **kwargs):
-        self.object_list = Member.only_members().order_by('-date_joined')
-        delivery_centers = Member.locations()
-        request.content_params['numbers'] = [(x, Member.only_members().filter(delivery_center=x)) for x in delivery_centers]
+        self.object_list = Member.locations()
+        request.content_params['numbers'] = \
+            [(x, Member.only_members().filter(delivery_center=x)) for x in self.object_list]
         context = self.get_context_data()
         return self.render_to_response(context)
